@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd "$(dirname "$0")"
 git pull
 
 declare -a IMAGES=(
@@ -9,5 +10,6 @@ declare -a IMAGES=(
 
 for IMAGE in "${IMAGES[@]}"
 do
-    make BASE_IMAGE=${IMAGE} push
+    make BASE_IMAGE=${IMAGE}
 done
+
