@@ -10,6 +10,6 @@ declare -a IMAGES=(
 
 for IMAGE in "${IMAGES[@]}"
 do
-    make BASE_IMAGE=${IMAGE}
+    make BASE_IMAGE=${IMAGE} push
 done
 
