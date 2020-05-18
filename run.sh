@@ -1,5 +1,7 @@
 #!/bin/bash
 
+git pull
+
 declare -a IMAGES=(
     "debian:buster-slim"
     "python:slim-buster"
