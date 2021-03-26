@@ -7,13 +7,12 @@ on:
 
 env:
   IMAGE_PATH: ghcr.io/pusnow
-  DEBIAN_VERSION: buster
 
 jobs:
   push:
     strategy:
       matrix:
-        image: ["debian:${{ env.DEBIAN_VERSION }}-slim", "python:slim-${{ env.DEBIAN_VERSION }}", "php:7-${{ env.DEBIAN_VERSION }}", "php:7-fpm-${{ env.DEBIAN_VERSION }}"]
+        image: ["debian:buster-slim", "python:slim-buster", "php:7-buster", "php:7-fpm-buster"]
 
     runs-on: ubuntu-latest
     
