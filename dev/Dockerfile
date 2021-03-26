@@ -14,11 +14,11 @@ RUN apt-get update && apt-get upgrade -y \
     wget \
     && rm -rf /var/lib/apt/lists/*
 
-RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
+RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/etc/poetry python3 -
 
 RUN mkdir -p /run/sshd
 COPY run.sh /
 
-WORKDIR /work
-VOLUME ["/work" , "/etc/ssh"]
+WORKDIR /root
+VOLUME ["/root" , "/etc/ssh"]
 CMD [ "/run.sh" ]
