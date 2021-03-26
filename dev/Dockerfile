@@ -16,6 +16,7 @@ RUN apt-get update && apt-get upgrade -y \
     pigz \
     pbzip2 \
     pixz \
+    bash-completion \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/etc/poetry python3 -
