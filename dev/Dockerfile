@@ -23,7 +23,7 @@ RUN apt-get update && apt-get upgrade -y \
     doxygen \
     git-lfs \
     jq \
-    ninja \
+    ninja-build \
     nload \
     openjdk \
     pandoc \
