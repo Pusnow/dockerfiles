@@ -17,6 +17,19 @@ RUN apt-get update && apt-get upgrade -y \
     pbzip2 \
     pixz \
     bash-completion \
+    clang-tools \
+    clang-format \
+    clang-tidy \
+    doxygen \
+    git-lfs \
+    jq \
+    ninja \
+    nload \
+    openjdk \
+    pandoc \
+    shellcheck \
+    shfmt \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/etc/poetry python3 -
