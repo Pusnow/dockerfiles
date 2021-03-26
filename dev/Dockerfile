@@ -25,7 +25,7 @@ RUN apt-get update && apt-get upgrade -y \
     jq \
     ninja-build \
     nload \
-    openjdk \
+    default-jdk-headless \
     pandoc \
     shellcheck \
     shfmt \
