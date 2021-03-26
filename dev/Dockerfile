@@ -1,7 +1,11 @@
 FROM debian:bullseye
 
 RUN apt-get update && apt-get upgrade -y \
-    && apt-get install -y \
+    && apt-get install -y aptitude \
+    && aptitude install -y \
+    ~pstandard \
+    ~prequired \
+    ~pimportant \ 
     build-essential \
     python3 \
     python3-pip \
