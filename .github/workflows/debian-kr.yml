@@ -12,7 +12,7 @@ jobs:
   push:
     strategy:
       matrix:
-        image: [debian:buster-slim]
+        image: ["debian:buster-slim"]
 
     runs-on: ubuntu-latest
     
