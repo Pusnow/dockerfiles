@@ -12,6 +12,10 @@ RUN apt-get update && apt-get upgrade -y \
     cmake \
     curl \
     wget \
+    tar \
+    pigz \
+    pbzip2 \
+    pixz \
     && rm -rf /var/lib/apt/lists/*
 
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | POETRY_HOME=/etc/poetry python3 -
