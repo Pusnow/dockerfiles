@@ -1,0 +1,31 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_PATH: ghcr.io/pusnow
+
+jobs:
+  push:
+    strategy:
+      matrix:
+        image: ["meshcommander", "virtmanager"]
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: |
+          docker build ${{ matrix.image }} --tag $IMAGE_PATH/${{matrix.image}}:latest
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.CR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.CR_NAME }} --password-stdin
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          docker push $IMAGE_PATH/${{matrix.image}}:latest
