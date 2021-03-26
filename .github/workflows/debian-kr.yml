@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  IMAGE_PATH: ghcr.io/Pusnow
+  IMAGE_PATH: ghcr.io/pusnow
 
 jobs:
   push:
