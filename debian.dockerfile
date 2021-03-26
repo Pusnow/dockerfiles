@@ -1,4 +1,5 @@
-FROM {BASE_IMAGE}
+ARG BASE_IMAGE=myorg/myapp:latest
+FROM $BASE_IMAGE
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN printf "\
