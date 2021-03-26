@@ -1,5 +1,5 @@
-FROM pusnow/debian:buster-slim
-LABEL maintainer="wsyoon@an.kaist.ac.kr"
+FROM debian:buster-slim
+LABEL maintainer="wonsup@pusnow.com"
 
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DISPLAY=:0.0
