@@ -1,0 +1,31 @@
+name: debian-kr
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_PATH: ghcr.io/Pusnow
+
+jobs:
+  push:
+    strategy:
+      matrix:
+        image: [debian:buster-slim]
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build image
+        run: |
+          docker build . --build-arg BASE_IMAGE=${{matrix.image}} --file debian.dockerfile --tag $IMAGE_PATH/${{matrix.image}}
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.CR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.CR_NAME }} --password-stdin
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          docker push $IMAGE_PATH/${{matrix.image}}
