@@ -27,10 +27,10 @@ RUN mkdir -p /opt/novnc/utils/websockify \
     | tar -xz -C /opt/novnc/utils/websockify --strip-components=1 
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
+ADD install-ssh.sh /install-ssh.sh
 
 EXPOSE 8080
 
-VOLUME [ "/root" ]
+VOLUME [ "/root", "/keys"]
 
 CMD ["/usr/bin/supervisord"]
