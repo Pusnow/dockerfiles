@@ -1,4 +1,6 @@
 FROM debian:bullseye
+LABEL maintainer="wonsup@pusnow.com"
+LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
 RUN apt-get update && apt-get upgrade -y \
     && apt-get install -y aptitude \
