@@ -1,4 +1,4 @@
-FROM debian:buster-slim
+FROM debian:testing
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
