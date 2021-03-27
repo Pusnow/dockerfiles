@@ -15,16 +15,11 @@ RUN apt-get update && apt-get install -y \
     fluxbox \
     curl \
     procps \
+    net-tools \
+    novnc \
     virt-manager \
     ssh \
     && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /opt/novnc \
-    && curl -SL https://github.com/novnc/noVNC/archive/$NOVNC_VERSION.tar.gz \
-    | tar -xz -C /opt/novnc --strip-components=1 
-RUN mkdir -p /opt/novnc/utils/websockify \
-    && curl -SL https://github.com/novnc/websockify/archive/$WEBSOCKIFY_VERSION.tar.gz \
-    | tar -xz -C /opt/novnc/utils/websockify --strip-components=1 
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD install-ssh.sh /install-ssh.sh
