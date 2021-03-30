@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD install-ssh.sh /install-ssh.sh
+ADD run.sh /run.sh
 
 EXPOSE 8080
 
