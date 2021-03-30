@@ -1,4 +1,4 @@
-FROM node:buster
+FROM node:alpine
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
