@@ -1,12 +1,10 @@
-FROM debian:testing
+FROM alpine:latest
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
-ENV DEBIAN_FRONTEND=noninteractive
 ENV DISPLAY=:0.0
 
-RUN apt-get update && apt-get install -y \
-    software-properties-common \
+RUN apk add --no-cache \
     xvfb \
     x11vnc \
     supervisor \
@@ -14,16 +12,15 @@ RUN apt-get update && apt-get install -y \
     curl \
     procps \
     net-tools \
-    novnc \
     virt-manager \
-    ssh \
-    && rm -rf /var/lib/apt/lists/*
+    openssh \
+    ttf-ubuntu-font-family
 
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD run.sh /run.sh
+ADD supervisord.conf /etc/supervisor/supervisord.conf
 
-EXPOSE 8080
+EXPOSE 5900
 
 VOLUME [ "/root", "/keys"]
 
-CMD ["/usr/bin/supervisord"]
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
