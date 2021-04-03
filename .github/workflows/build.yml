@@ -13,7 +13,7 @@ jobs:
   push:
     strategy:
       matrix:
-        image: ["meshcommander", "virtmanager", "dev"]
+        image: ["meshcommander", "virtmanager"]
 
     runs-on: ubuntu-latest
     
