@@ -8,5 +8,5 @@ RUN apk add --no-cache \
 
 ADD entrypoint.sh /
 
-VOLUME [ "/key" ]
+VOLUME [ "/keys" ]
 ENTRYPOINT [ "/entrypoint.sh" ]
