@@ -10,5 +10,5 @@ RUN mkdir /app; cd /app; npm install meshcommander
 WORKDIR /app/node_modules
 ADD entrypoint.sh /
 
-VOLUME [ "/root", "/key" ]
+VOLUME [ "/root", "/keys" ]
 ENTRYPOINT [ "/entrypoint.sh" ]
