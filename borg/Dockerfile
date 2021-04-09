@@ -3,10 +3,6 @@ LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
 RUN apk add --no-cache \
-    borgbackup \
-    openssh
+    borgbackup
 
-ADD entrypoint.sh /
-
-VOLUME [ "/keys" ]
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/usr/bin/borg" ]
