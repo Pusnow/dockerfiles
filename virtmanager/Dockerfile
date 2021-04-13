@@ -14,8 +14,7 @@ RUN apk add --no-cache \
     net-tools \
     virt-manager \
     openssh \
-    paper-icon-theme \
-    paper-gtk-theme \
+    gnome-icon-theme \
     font-noto
 
 ADD run.sh /run.sh
