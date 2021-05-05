@@ -14,7 +14,8 @@ RUN apk add --no-cache \
     net-tools \
     virt-manager \
     openssh \
-    ttf-ubuntu-font-family
+    gnome-icon-theme \
+    ttf-opensans
 
 ADD run.sh /run.sh
 ADD supervisord.conf /etc/supervisor/supervisord.conf
