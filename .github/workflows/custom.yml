@@ -1,4 +1,4 @@
-name: build
+name: custom
 
 on:
   push:
@@ -10,7 +10,7 @@ env:
   IMAGE_PATH: ghcr.io/pusnow
 
 jobs:
-  push:
+  custom:
     strategy:
       matrix:
         image: ["meshcommander", "virtmanager", "borg", "texlive"]
@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build image
+      - name: Build custom image
         run: |
           docker build ${{ matrix.image }} --tag $IMAGE_PATH/${{matrix.image}}:latest
 
