@@ -11,7 +11,7 @@ env:
   IMAGE_PATH: ghcr.io/pusnow
 
 jobs:
-  push:
+  debian:
     strategy:
       matrix:
         image: ["debian:buster-slim", "python:slim-buster", "php:7-buster", "php:7-fpm-buster"]
@@ -21,7 +21,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: Build image
+      - name: Build Debian image
         run: |
           docker build . --build-arg BASE_IMAGE=${{matrix.image}} --file debian.dockerfile --tag $IMAGE_PATH/${{matrix.image}}
 
