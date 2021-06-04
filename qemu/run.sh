@@ -13,19 +13,19 @@ if [ ! -f "$QEMU_DISK2" ] && [ ! -z "$QEMU_DISK2_INITIALIZE" ]; then
 fi
 
 
-if [ ! -f "$QEMU_DISK" ] && [ ! -z "$QEMU_DISK" ]; then
+if [ -f "$QEMU_DISK" ] && [ ! -z "$QEMU_DISK" ]; then
     QEMU_DISK_ARG="-drive file=$QEMU_DISK,if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
 fi
 
-if [ ! -f "$QEMU_DISK2" ] && [ ! -z "$QEMU_DISK2" ]; then
+if [ -f "$QEMU_DISK2" ] && [ ! -z "$QEMU_DISK2" ]; then
     QEMU_DISK2_ARG="-drive file=$QEMU_DISK2,if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
 fi
 
-if [ ! -f "$QEMU_ISO" ] && [ ! -z "$QEMU_ISO" ]; then
+if [ -f "$QEMU_ISO" ] && [ ! -z "$QEMU_ISO" ]; then
     QEMU_ISO_ARG="-drive file=$QEMU_ISO,media=cdrom"
 fi
 
-if [ ! -f "$QEMU_ISO2" ] && [ ! -z "$QEMU_ISO2" ]; then
+if [ -f "$QEMU_ISO2" ] && [ ! -z "$QEMU_ISO2" ]; then
     QEMU_ISO2_ARG="-drive file=$QEMU_ISO2,media=cdrom"
 fi
 
