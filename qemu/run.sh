@@ -31,7 +31,7 @@ fi
 
 
 
-echo qemu-system-x86_64 -machine q35 \
+qemu-system-x86_64 -machine q35 \
     -smp $QEMU_SMP -m $QEMU_MEMORY \
     -vnc 0.0.0.0:0 \
     $QEMU_RTC_ARG \
