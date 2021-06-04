@@ -31,7 +31,7 @@ fi
 
 
 
-qemu-system-x86_64 -machine q35 \
+echo qemu-system-x86_64 -machine q35 \
     -smp $QEMU_SMP -m $QEMU_MEMORY \
     -vnc 0.0.0.0:0 \
     $QEMU_RTC_ARG \
@@ -42,4 +42,5 @@ qemu-system-x86_64 -machine q35 \
     $QEMU_DISK_ARG \
     $QEMU_DISK2_ARG \
     $QEMU_ISO_ARG \
-    $QEMU_ISO2_ARG
+    $QEMU_ISO2_ARG \
+    $QEMU_EXTRA_ARGS
