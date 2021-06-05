@@ -31,8 +31,10 @@ fi
 
 
 
-qemu-system-x86_64 -machine q35 \
-    -smp $QEMU_SMP -m $QEMU_MEMORY \
+qemu-system-x86_64 \
+    -machine q35,accel=kvm \
+    -cpu host -smp $QEMU_SMP \
+    -m $QEMU_MEMORY \
     -vnc 0.0.0.0:0 \
     $QEMU_RTC_ARG \
     -usb -device usb-tablet \
