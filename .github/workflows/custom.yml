@@ -33,7 +33,7 @@ jobs:
     needs: base
     strategy:
       matrix:
-        image: ["meshcommander", "virtmanager", "borg", "texlive", "qemu"]
+        image: ["meshcommander", "virtmanager", "borg", "texlive", "qemu", "hugo"]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
