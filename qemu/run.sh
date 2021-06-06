@@ -31,7 +31,7 @@ fi
 
 
 if [ ! -z "$QEMU_MAC" ]; then
-    QEMU_MAC_ARGS=",addr=$QEMU_MAC"
+    QEMU_MAC_ARGS=",mac=$QEMU_MAC"
 fi
 
 if [ ! -z "$QEMU_TAP" ]; then
