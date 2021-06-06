@@ -30,6 +30,16 @@ if [ -f "$QEMU_ISO2" ] && [ ! -z "$QEMU_ISO2" ]; then
 fi
 
 
+if [ ! -z "$QEMU_MAC" ]; then
+    QEMU_MAC_ARGS=",addr=$QEMU_MAC"
+fi
+
+if [ ! -z "$QEMU_TAP" ]; then
+    QEMU_NET_ARGS="-nic tap,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS"
+else
+    QEMU_NET_ARGS="-nic user,model=virtio-net-pci$QEMU_MAC_ARGS"
+fi
+
 
 qemu-system-x86_64 \
     -machine q35,accel=kvm \
@@ -40,7 +50,7 @@ qemu-system-x86_64 \
     -usb -device usb-tablet \
     -device virtio-keyboard-pci \
     -device virtio-balloon-pci \
-    -nic user,model=virtio-net-pci \
+    $QEMU_NET_ARGS \
     $QEMU_DISK_ARG \
     $QEMU_DISK2_ARG \
     $QEMU_ISO_ARG \
