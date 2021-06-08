@@ -7,6 +7,7 @@ RUN apt-get update \
     ssh \
     curl \
     vim \
+    git \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
