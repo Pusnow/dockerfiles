@@ -7,7 +7,7 @@ services:
         - data:/root
         - ssh:/ssh
     ports:
-        - 2222:22
+        - "2222:22"
     environment:
         - SSH_KEY=https://github.com/pusnow.keys
 volumes:
