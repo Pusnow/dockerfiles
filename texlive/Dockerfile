@@ -8,6 +8,9 @@ RUN apt-get update \
     curl \
     vim \
     git \
+    libyaml-tiny-perl \
+    libfile-homedir-perl \
+    libunicode-linebreak-perl \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
