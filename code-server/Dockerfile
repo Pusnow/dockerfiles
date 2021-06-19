@@ -9,7 +9,7 @@ RUN apt-get update \
     build-essential \
     gdb \
     cmake \
-    ninja \
+    ninja-build \
     clang-format \
     python3 \
     python3-pip \
