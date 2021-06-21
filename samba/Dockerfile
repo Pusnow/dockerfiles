@@ -7,5 +7,5 @@ RUN apk add --no-cache \
 
 EXPOSE 445
 
-VOLUME ["/config" ]
+VOLUME ["/config", "/db"]
 CMD ["/usr/sbin/smbd", "-F", "--no-process-group", "-S", "-s", "/config/smbd.conf"]
