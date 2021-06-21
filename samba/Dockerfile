@@ -5,9 +5,7 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 RUN apk add --no-cache \
     samba
 
-COPY run.sh /run.sh
-
 EXPOSE 445
 
 VOLUME [ "/data", "/config" ]
-CMD ["/run.sh"]
+CMD ["/usr/sbin/smbd", "-F", "--no-process-group", "-S", "-s", "/config/smbd.conf"]
