@@ -5,8 +5,8 @@ if [ ! -f "/config/smbd.conf" ] ; then
 fi
 
 
-for UID in $UIDS;do
-    useradd -u $UID u$UID
-done
+useradd -u $UID1 $USER1
+useradd -u $UID2 $USER2
+
 
 /usr/sbin/smbd -F --no-process-group -S -s /config/smbd.conf

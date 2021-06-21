@@ -7,7 +7,10 @@ RUN apk add --no-cache \
     shadow
 
 EXPOSE 445
-ENV UIDS=""
+ENV USER1=user1
+ENV UID1=1000
+ENV USER2=user2
+ENV UID2=1001
 
 COPY run.sh /run.sh
 
