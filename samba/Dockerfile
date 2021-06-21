@@ -7,5 +7,7 @@ RUN apk add --no-cache \
 
 EXPOSE 445
 
+RUN chmod -R 777 /var/log/samba
+
 VOLUME [ "/data", "/config" ]
 CMD ["/usr/sbin/smbd", "-F", "--no-process-group", "-S", "-s", "/config/smbd.conf"]
