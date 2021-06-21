@@ -5,6 +5,9 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 RUN apt-get update \
     && apt-get install -y \
     ssh \
+    dnsutils \
+    net-tools \
+    iputils-ping \
     wget \
     curl \
     git \
@@ -13,6 +16,7 @@ RUN apt-get update \
     build-essential \
     gdb \
     cmake \
+    meson \
     ninja-build \
     clang-format \
     python3 \
