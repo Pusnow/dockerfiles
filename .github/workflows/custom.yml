@@ -23,6 +23,7 @@ jobs:
             "hugo",
             "code-server",
             "dev",
+            "samba",
           ]
     runs-on: ubuntu-latest
     steps:
