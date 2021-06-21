@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 RUN apt-get update \
     && apt-get install -y \
     ssh \
+    wget \
     curl \
     git \
     htop \
