@@ -38,4 +38,6 @@ ADD supervisord.conf /etc/supervisor/supervisord.conf
 
 VOLUME ["/root"]
 
+ENV VNC_PASSWORD x11vnc
+
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/supervisord.conf"]
