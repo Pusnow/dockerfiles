@@ -17,6 +17,7 @@ RUN apt-get update \
     libasound2 \
     ssh \
     git \
+    firefox-esr \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
