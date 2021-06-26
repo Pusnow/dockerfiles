@@ -24,6 +24,7 @@ jobs:
             "code-server",
             "dev",
             "samba",
+            "vscode",
           ]
     runs-on: ubuntu-latest
     steps:
