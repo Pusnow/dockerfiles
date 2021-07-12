@@ -12,7 +12,6 @@ if [ ! -f "$QEMU_DISK2" ] && [ ! -z "$QEMU_DISK2_INITIALIZE" ]; then
     qemu-img create -f qcow2 $QEMU_DISK2 $QEMU_DISK2_INITIALIZE
 fi
 
-
 if [ -f "$QEMU_DISK" ] && [ ! -z "$QEMU_DISK" ]; then
     QEMU_DISK_ARG="-drive file=$QEMU_DISK,if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
 fi
@@ -29,17 +28,29 @@ if [ -f "$QEMU_ISO2" ] && [ ! -z "$QEMU_ISO2" ]; then
     QEMU_ISO2_ARG="-drive file=$QEMU_ISO2,media=cdrom"
 fi
 
-
 if [ ! -z "$QEMU_MAC" ]; then
     QEMU_MAC_ARGS=",mac=$QEMU_MAC"
+fi
+
+QEMU_NET_HOSTFWD=""
+
+if [ ! -z "$QEMU_PORT_1" ]; then
+    QEMU_NET_HOSTFWD="$QEMU_NET_HOSTFWD,hostfwd=tcp::$QEMU_PORT_1-:$QEMU_PORT_1,hostfwd=udp::$QEMU_PORT_1-:$QEMU_PORT_1"
+fi
+
+if [ ! -z "$QEMU_PORT_2" ]; then
+    QEMU_NET_HOSTFWD="$QEMU_NET_HOSTFWD,hostfwd=tcp::$QEMU_PORT_2-:$QEMU_PORT_2,hostfwd=udp::$QEMU_PORT_2-:$QEMU_PORT_2"
+fi
+
+if [ ! -z "$QEMU_PORT_3" ]; then
+    QEMU_NET_HOSTFWD="$QEMU_NET_HOSTFWD,hostfwd=tcp::$QEMU_PORT_3-:$QEMU_PORT_3,hostfwd=udp::$QEMU_PORT_3-:$QEMU_PORT_3"
 fi
 
 if [ ! -z "$QEMU_TAP" ]; then
     QEMU_NET_ARGS="-nic tap,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS"
 else
-    QEMU_NET_ARGS="-nic user,model=virtio-net-pci$QEMU_MAC_ARGS"
+    QEMU_NET_ARGS="-nic user,model=virtio-net-pci$QEMU_MAC_ARGS$QEMU_NET_HOSTFWD"
 fi
-
 
 qemu-system-x86_64 \
     -machine q35,accel=kvm \
