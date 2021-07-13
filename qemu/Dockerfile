@@ -25,6 +25,7 @@ ENV QEMU_EXTRA_ARGS=""
 ENV QEMU_PORT_1="3389"
 ENV QEMU_PORT_2=""
 ENV QEMU_PORT_3=""
+ENV QEMU_VNC=""
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]

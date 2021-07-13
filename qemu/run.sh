@@ -47,16 +47,22 @@ if [ ! -z "$QEMU_PORT_3" ]; then
 fi
 
 if [ ! -z "$QEMU_TAP" ]; then
-    QEMU_NET_ARGS="-nic tap,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS"
+    QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS"
 else
     QEMU_NET_ARGS="-nic user,model=virtio-net-pci$QEMU_MAC_ARGS$QEMU_NET_HOSTFWD"
+fi
+
+if [ ! -z "$QEMU_VNC" ]; then
+    QEMU_VNC_ARG="-vnc $QEMU_VNC"
+else
+    QEMU_VNC_ARG="-vnc 0.0.0.0:0"
 fi
 
 qemu-system-x86_64 \
     -machine q35,accel=kvm \
     -cpu host -smp $QEMU_SMP \
     -m $QEMU_MEMORY \
-    -vnc 0.0.0.0:0 \
+    $QEMU_VNC_ARG \
     $QEMU_RTC_ARG \
     -usb -device usb-tablet \
     -device virtio-keyboard-pci \
