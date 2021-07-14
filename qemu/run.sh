@@ -46,8 +46,12 @@ if [ ! -z "$QEMU_PORT_3" ]; then
     QEMU_NET_HOSTFWD="$QEMU_NET_HOSTFWD,hostfwd=tcp::$QEMU_PORT_3-:$QEMU_PORT_3,hostfwd=udp::$QEMU_PORT_3-:$QEMU_PORT_3"
 fi
 
+if [ ! -z "$QEMU_VHOST" ]; then
+    QEMU_VHOST_ARGS=",vhost=$QEMU_VHOST"
+fi
+
 if [ ! -z "$QEMU_TAP" ]; then
-    QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS"
+    QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=$QEMU_TAP,model=virtio-net-pci$QEMU_MAC_ARGS$QEMU_VHOST_ARGS"
 else
     QEMU_NET_ARGS="-nic user,model=virtio-net-pci$QEMU_MAC_ARGS$QEMU_NET_HOSTFWD"
 fi
