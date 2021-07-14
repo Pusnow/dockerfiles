@@ -64,7 +64,7 @@ fi
 
 qemu-system-x86_64 \
     -machine q35,accel=kvm \
-    -cpu host -smp $QEMU_SMP \
+    -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
     -m $QEMU_MEMORY \
     $QEMU_VNC_ARG \
     $QEMU_RTC_ARG \
