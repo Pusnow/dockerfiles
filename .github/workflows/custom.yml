@@ -25,6 +25,7 @@ jobs:
             "dev",
             "samba",
             "vscode",
+            "lighttpd",
           ]
     runs-on: ubuntu-latest
     steps:
