@@ -26,6 +26,7 @@ jobs:
             "samba",
             "vscode",
             "lighttpd",
+            "elixir",
           ]
     runs-on: ubuntu-latest
     steps:
