@@ -51,9 +51,7 @@ RUN \
   git clone https://github.com/bootlin/elixir.git /usr/local/elixir/
 
 COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN \
-  echo -e "\nHttpProtocolOptions Unsafe" >> /etc/apache2/apache.conf && \
-  a2enmod cgi rewrite
+RUN a2enmod cgi rewrite
 
 
 COPY update.sh /update.sh

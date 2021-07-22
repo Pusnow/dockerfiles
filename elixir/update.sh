@@ -18,5 +18,8 @@ for url in "$@"; do
 done
 popd || exit
 
+first_project=$(ls -1 /data | head -1)
+echo "Define elixir_home ${first_project}" > /etc/apache2/conf-enabled/elixir_home.conf
+
 
 /usr/sbin/apache2ctl -D FOREGROUND
