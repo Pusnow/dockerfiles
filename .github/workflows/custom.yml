@@ -27,6 +27,7 @@ jobs:
             "vscode",
             "lighttpd",
             "elixir",
+            "ssh",
           ]
     runs-on: ubuntu-latest
     steps:
