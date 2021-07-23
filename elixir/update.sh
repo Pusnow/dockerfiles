@@ -7,6 +7,7 @@ for url in "$@"; do
     mkdir -p  /data/$project_name/repo
     git clone "${url}" /data/$project_name/repo/
     pushd  /data/$project_name/repo/ || exit
+    git tag -f -a default -m "default branch"
     git pull
     popd ||exit
 
