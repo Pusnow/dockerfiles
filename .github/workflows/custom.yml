@@ -24,7 +24,6 @@ jobs:
             "code-server",
             "dev",
             "samba",
-            "vscode",
             "lighttpd",
             "elixir",
             "ssh",
