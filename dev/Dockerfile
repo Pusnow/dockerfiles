@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
 RUN apt-get update \
     && apt-get install -y \
+    locales \
     ssh \
     dnsutils \
     net-tools \
@@ -31,6 +32,12 @@ RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
     echo "AuthorizedKeysFile     /ssh/authorized_keys" >> /etc/ssh/sshd_config && \
     echo "HostKey /ssh/host_key" >> /etc/ssh/sshd_config
+
+RUN cat "en_US.UTF-8" > /etc/locale.gen && locale-gen
+
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 COPY entrypoint.sh /entrypoint.sh
 EXPOSE 22
