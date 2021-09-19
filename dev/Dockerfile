@@ -33,7 +33,7 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/
     echo "AuthorizedKeysFile     /ssh/authorized_keys" >> /etc/ssh/sshd_config && \
     echo "HostKey /ssh/host_key" >> /etc/ssh/sshd_config
 
-RUN cat "en_US.UTF-8" > /etc/locale.gen && locale-gen
+RUN echo "en_US.UTF-8" > /etc/locale.gen && locale-gen
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
