@@ -11,6 +11,7 @@ RUN apt-get update \
     iputils-ping \
     wget \
     curl \
+    rsync \
     git \
     htop \
     nload \
