@@ -24,8 +24,9 @@ RUN apt-get update \
     python3 \
     python3-pip \
     python3-venv \
-    neovim \
+    vim \
     shellcheck \
+    sloccount \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
