@@ -27,6 +27,7 @@ jobs:
             "lighttpd",
             "elixir",
             "ssh",
+            "jenkins",
           ]
     runs-on: ubuntu-latest
     steps:
