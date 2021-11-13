@@ -29,7 +29,6 @@ jobs:
             "elixir",
             "ssh",
             "jenkins",
-            "gh-runner",
           ]
     runs-on: ubuntu-latest
     steps:
