@@ -29,6 +29,7 @@ jobs:
             "elixir",
             "ssh",
             "jenkins",
+            "actions-runner",
           ]
     runs-on: ubuntu-latest
     steps:
