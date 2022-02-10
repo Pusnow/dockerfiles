@@ -30,6 +30,7 @@ jobs:
             "ssh",
             "jenkins",
             "actions-runner",
+            "rsync",
           ]
     runs-on: ubuntu-latest
     steps:
