@@ -1,0 +1,12 @@
+[Unit]
+Description=VM Init Service
+Before=gh-init.service
+Before=ssh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/vm/vm-init.sh
+
+[Install]
+WantedBy=basic.target

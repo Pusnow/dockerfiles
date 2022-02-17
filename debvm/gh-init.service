@@ -1,0 +1,11 @@
+[Unit]
+Description=GH Init Service
+After=ssh.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/opt/vm/gh-init.sh
+
+[Install]
+WantedBy=multi-user.target
