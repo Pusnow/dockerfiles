@@ -36,6 +36,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh
+
       - name: Build stage1 image
         run: |
           docker build ${{ matrix.image }} --tag ${{matrix.image}}:latest
@@ -64,6 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh
 
       - name: Build custom image
         run: |
