@@ -38,7 +38,7 @@ jobs:
 
       - name: Prepare
         run: |
-          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh || true
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
 
       - name: Build stage1 image
         run: |
@@ -71,7 +71,7 @@ jobs:
 
       - name: Prepare
         run: |
-          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
 
       - name: Build custom image
         run: |
