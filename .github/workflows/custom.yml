@@ -38,7 +38,7 @@ jobs:
 
       - name: Prepare
         run: |
-          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh
+          cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh || true
 
       - name: Build stage1 image
         run: |
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Prepare
         run: |
           cd ${{ matrix.image }} && [ -x prepare.sh ] && ./prepare.sh
