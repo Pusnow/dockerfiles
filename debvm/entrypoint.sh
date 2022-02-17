@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -ex
 VM_CPUS=${VM_CPUS:-1}
 VM_MEMORY=${VM_MEMORY:-1G}
