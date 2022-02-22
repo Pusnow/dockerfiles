@@ -31,7 +31,6 @@ jobs:
             "jenkins",
             "actions-runner",
             "rsync",
-            "debvm",
           ]
     runs-on: ubuntu-latest
     steps:
