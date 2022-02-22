@@ -34,7 +34,7 @@ RUN apt-get update \
     sloccount \
     # VM
     qemu-utils \
-    docker.io \
+    podman \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
