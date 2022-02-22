@@ -20,7 +20,6 @@ RUN apt-get update \
     cmake \
     meson \
     ninja-build \
-    clang-format \
     python3 \
     python3-pip \
     python3-venv \
