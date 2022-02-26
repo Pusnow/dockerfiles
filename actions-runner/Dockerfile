@@ -1,6 +1,5 @@
 FROM myoung34/github-runner:debian-bullseye
 
-RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y \
     curl \
@@ -15,4 +14,10 @@ RUN apt-get update && apt-get install -y \
     shellcheck \
     sloccount \
     zip \
-    unzip
+    unzip \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/
+
+
+
+RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list

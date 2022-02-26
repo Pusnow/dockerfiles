@@ -30,10 +30,15 @@ jobs:
             "ssh",
             "jenkins",
             "actions-runner",
+            "rsync",
           ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
 
       - name: Build stage1 image
         run: |
@@ -63,6 +68,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
 
       - name: Build custom image
         run: |
