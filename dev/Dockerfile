@@ -19,6 +19,7 @@ RUN apt-get update \
     unzip \
     zip \
     aria2 \
+    screen \
     # C/C++
     build-essential \
     gdb \
