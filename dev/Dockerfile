@@ -23,6 +23,7 @@ RUN apt-get update \
     zip \
     aria2 \
     screen \
+    jq \
     # C/C++
     build-essential \
     gdb \
