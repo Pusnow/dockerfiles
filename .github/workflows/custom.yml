@@ -7,7 +7,8 @@ on:
   schedule:
     - cron: "0 0 * * 0"
 env:
-  IMAGE_PATH: ghcr.io/pusnow
+  CR_PATH: ghcr.io/pusnow
+  DH_PATH: pusnow
 
 jobs:
   stage1:
@@ -24,22 +25,40 @@ jobs:
             "code-server",
             "dev",
             "samba",
-            "vscode",
+            "lighttpd",
+            "elixir",
+            "ssh",
+            "jenkins",
+            "actions-runner",
+            "rsync",
           ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
+
       - name: Build stage1 image
         run: |
-          docker build ${{ matrix.image }} --tag $IMAGE_PATH/${{matrix.image}}:latest
+          docker build ${{ matrix.image }} --tag ${{matrix.image}}:latest
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.CR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.CR_NAME }} --password-stdin
 
       - name: Push image to GitHub Container Registry
         run: |
-          docker push $IMAGE_PATH/${{matrix.image}}:latest
+          docker tag ${{matrix.image}}:latest $CR_PATH/${{matrix.image}}:latest
+          docker push $CR_PATH/${{matrix.image}}:latest
+
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DH_TOKEN }}" | docker login -u ${{ secrets.DH_NAME }} --password-stdin
+
+      - name: Push image to Docker Hub
+        run: |
+          docker tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
+          docker push $DH_PATH/${{matrix.image}}:latest
 
   stage2:
     needs: stage1
@@ -50,13 +69,26 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: Prepare
+        run: |
+          cd ${{ matrix.image }} && if [ -x prepare.sh ]; then ./prepare.sh; else true ; fi
+
       - name: Build custom image
         run: |
-          docker build ${{ matrix.image }} --tag $IMAGE_PATH/${{matrix.image}}:latest
+          docker build ${{ matrix.image }} --tag ${{matrix.image}}:latest
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.CR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.CR_NAME }} --password-stdin
 
       - name: Push image to GitHub Container Registry
         run: |
-          docker push $IMAGE_PATH/${{matrix.image}}:latest
+          docker tag ${{matrix.image}}:latest $CR_PATH/${{matrix.image}}:latest
+          docker push $CR_PATH/${{matrix.image}}:latest
+
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DH_TOKEN }}" | docker login -u ${{ secrets.DH_NAME }} --password-stdin
+
+      - name: Push image to Docker Hub
+        run: |
+          docker tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
+          docker push $DH_PATH/${{matrix.image}}:latest

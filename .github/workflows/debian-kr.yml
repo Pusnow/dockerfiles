@@ -8,7 +8,8 @@ on:
     - cron: "0 0 * * 0"
 
 env:
-  IMAGE_PATH: ghcr.io/pusnow
+  CR_PATH: ghcr.io/pusnow
+  DH_PATH: pusnow
 
 jobs:
   debian:
@@ -29,11 +30,20 @@ jobs:
 
       - name: Build Debian image
         run: |
-          docker build . --build-arg BASE_IMAGE=${{matrix.image}} --file debian.dockerfile --tag $IMAGE_PATH/${{matrix.image}}
+          docker build . --build-arg BASE_IMAGE=${{matrix.image}} --file debian.dockerfile --tag ${{matrix.image}}
 
       - name: Log into GitHub Container Registry
         run: echo "${{ secrets.CR_TOKEN }}" | docker login https://ghcr.io -u ${{ secrets.CR_NAME }} --password-stdin
 
       - name: Push image to GitHub Container Registry
         run: |
-          docker push $IMAGE_PATH/${{matrix.image}}
+          docker tag ${{matrix.image}} $CR_PATH/${{matrix.image}}
+          docker push $CR_PATH/${{matrix.image}}
+
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DH_TOKEN }}" | docker login -u ${{ secrets.DH_NAME }} --password-stdin
+
+      - name: Push image to Docker Hub
+        run: |
+          docker tag ${{matrix.image}} $DH_PATH/${{matrix.image}}
+          docker push $DH_PATH/${{matrix.image}}

@@ -8,6 +8,8 @@ RUN apt-get update \
     curl \
     vim \
     git \
+    ghostscript \
+    poppler-utils \
     libyaml-tiny-perl \
     libfile-homedir-perl \
     libunicode-linebreak-perl \
