@@ -46,7 +46,8 @@ RUN apt-get update \
     && rm -rf /var/cache/apt/
 
 RUN mkdir -p /usr/local/lib/podman && \
- wget -O /usr/local/lib/podman/gvproxy https://github.com/containers/gvisor-tap-vsock/releases/download/v${GVPROXY_VERSION}/gvproxy-linux
+ wget -O /usr/local/lib/podman/gvproxy https://github.com/containers/gvisor-tap-vsock/releases/download/v${GVPROXY_VERSION}/gvproxy-linux && \
+ chmod +x /usr/local/lib/podman/gvproxy
 
 RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
