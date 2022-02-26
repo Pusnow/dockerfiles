@@ -32,7 +32,6 @@ RUN apt-get update \
 
 RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
-    echo "AuthorizedKeysFile     /ssh/authorized_keys" >> /etc/ssh/sshd_config && \
     echo "HostKey /ssh/host_key" >> /etc/ssh/sshd_config
 
 RUN echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && locale-gen

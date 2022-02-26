@@ -1,8 +1,8 @@
 #!/bin/sh
 
 if [ -n "$SSH_KEY" ]; then
-    mkdir -p /ssh
-    wget --no-cache --no-cookies -o /dev/null -O /ssh/authorized_keys "$SSH_KEY" 2>&1
+    mkdir -p /root/.ssh
+    wget --no-cache --no-cookies -o /dev/null -O /root/.ssh/authorized_keys "$SSH_KEY" 2>&1
 
 fi
 
