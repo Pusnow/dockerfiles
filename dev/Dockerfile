@@ -24,6 +24,8 @@ RUN apt-get update \
     python3-venv \
     neovim \
     shellcheck \
+    && apt install --no-install-recommends -y \
+    qemu-system-x86 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
