@@ -2,6 +2,8 @@ FROM  debian:testing
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
+ARG GVPROXY_VERSION=0.3.0
+
 RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y \
@@ -42,6 +44,9 @@ RUN apt-get update \
     qemu-system-x86 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
+
+RUN mkdir -p /usr/local/lib/podman && \
+ wget -O /usr/local/lib/podman/gvproxy https://github.com/containers/gvisor-tap-vsock/releases/download/v${GVPROXY_VERSION}/gvproxy-linux
 
 RUN sed -i 's/deb.debian.org/mirror.kakao.com/' /etc/apt/sources.list
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
