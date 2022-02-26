@@ -18,6 +18,7 @@ RUN apt-get update \
     nload \
     unzip \
     zip \
+    aria2 \
     # C/C++
     build-essential \
     gdb \
