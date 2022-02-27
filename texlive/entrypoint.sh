@@ -13,7 +13,7 @@ fi
 if [ $# -eq 0 ]; then
     mkdir -p /run/sshd
     eval $(ssh-agent)
-    /usr/sbin/sshd -D -e
+    exec /usr/sbin/sshd -D -e
 else
-    $@
+    exec $@
 fi

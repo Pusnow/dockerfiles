@@ -25,4 +25,4 @@ fi
 
 
 echo "Starting Mesh Commander ..."
-node meshcommander --any
+exec node meshcommander --any

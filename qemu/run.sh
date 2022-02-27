@@ -62,7 +62,7 @@ else
     QEMU_VNC_ARG="-vnc 0.0.0.0:0"
 fi
 
-qemu-system-x86_64 \
+exec qemu-system-x86_64 \
     -machine q35,accel=kvm \
     -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
     -m $QEMU_MEMORY \

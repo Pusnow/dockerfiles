@@ -9,4 +9,4 @@ useradd -u $UID1 $USER1
 useradd -u $UID2 $USER2
 
 
-/usr/sbin/smbd -F --no-process-group -S -s /config/smbd.conf
+exec /usr/sbin/smbd -F --no-process-group -S -s /config/smbd.conf

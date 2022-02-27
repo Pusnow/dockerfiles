@@ -5,4 +5,4 @@ mkdir -p "$HOME/.ssh"
 cp -r /keys/* "$HOME/.ssh"
 
 echo "Starting Virt Manager..."
-/usr/bin/virt-manager --no-fork
+exec /usr/bin/virt-manager --no-fork

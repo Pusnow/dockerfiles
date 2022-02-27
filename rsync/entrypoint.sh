@@ -9,4 +9,4 @@ fi
 echo "Public key:"
 cat ${SSH_KEY}.pub
 
-/usr/bin/rsync $@
+exec /usr/bin/rsync $@
