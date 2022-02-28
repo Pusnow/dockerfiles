@@ -62,7 +62,14 @@ else
     QEMU_VNC_ARG="-vnc 0.0.0.0:0"
 fi
 
-exec qemu-system-x86_64 \
+term_handler() {
+    stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | nc local:/var/run/qmp.sock
+}
+trap 'term_handler' TERM
+
+qemu-system-x86_64 \
+    -pidfile /var/run/qemu.pid \
+    -qmp unix:/var/run/qmp.sock,server,nowait \
     -machine q35,accel=kvm \
     -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
     -m $QEMU_MEMORY \
@@ -76,4 +83,15 @@ exec qemu-system-x86_64 \
     $QEMU_DISK2_ARG \
     $QEMU_ISO_ARG \
     $QEMU_ISO2_ARG \
-    $QEMU_EXTRA_ARGS
+    $QEMU_EXTRA_ARGS &
+
+while [ ! -f /var/run/qemu.pid ]; do
+    sleep 1
+done
+
+QEMU_PID="$(cat /var/run/qemu.pid)"
+
+while [ -f /var/run/qemu.pid ]; do
+    wait $QEMU_PID
+    echo "Waiting QEMU shutdown..."
+done

@@ -4,7 +4,8 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
 RUN apk add --no-cache \
     qemu-img \
-    qemu-system-x86_64 
+    qemu-system-x86_64 \
+    coreutils
 
 ADD run.sh /
 
