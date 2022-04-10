@@ -2,6 +2,7 @@ FROM myoung34/github-runner:debian-bullseye
 
 
 RUN apt-get update && apt-get install -y \
+    buildah \
     curl \
     cmake \
     meson \
