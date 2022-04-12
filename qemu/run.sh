@@ -2,8 +2,13 @@
 
 QEMU_UEFI_ARG=""
 if [ ! -z "$QEMU_UEFI" ]; then
-    QEMU_UEFI_ARG="-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd"
-    QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS.fd"
+    if [ -z "$QEMU_UEFI_SECURE" ]; then
+        QEMU_UEFI_ARG="-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd"
+        QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd"
+    else
+        QEMU_UEFI_ARG="-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE_4M.secboot.fd"
+        QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd"
+    fi
 fi
 QEMU_RTC_ARG=""
 if [ ! -z "$QEMU_RTC" ]; then
@@ -72,10 +77,43 @@ else
     QEMU_VNC_ARG="-vnc 0.0.0.0:0"
 fi
 
+QEMU_TPM_ARG=""
+if [ ! -z "$QEMU_TPM" ]; then
+    mkdir /run/tpm
+    swtpm socket -d \
+        --tpmstate dir=/run/tpm \
+        --ctrl type=unixio,path=/run/tpm.sock \
+        --tpm2 \
+        --log level=20
+    QEMU_TPM_ARG="-chardev socket,id=chrtpm,path=/run/tpm.sock"
+    QEMU_TPM_ARG="${QEMU_TPM_ARG} -tpmdev emulator,id=tpm0,chardev=chrtpm"
+    QEMU_TPM_ARG="${QEMU_TPM_ARG} -device tpm-tis,tpmdev=tpm0"
+fi
+
 term_handler() {
     stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | nc local:/var/run/qmp.sock
 }
 trap 'term_handler' TERM
+
+echo qemu-system-x86_64 \
+    -pidfile /var/run/qemu.pid \
+    -qmp unix:/var/run/qmp.sock,server,nowait \
+    -machine q35,accel=kvm \
+    -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
+    -m $QEMU_MEMORY \
+    $QEMU_VNC_ARG \
+    $QEMU_UEFI_ARG \
+    $QEMU_RTC_ARG \
+    $QEMU_TPM_ARG \
+    -usb -device usb-tablet \
+    -device virtio-keyboard-pci \
+    -device virtio-balloon-pci \
+    $QEMU_NET_ARGS \
+    $QEMU_DISK_ARG \
+    $QEMU_DISK2_ARG \
+    $QEMU_ISO_ARG \
+    $QEMU_ISO2_ARG \
+    $QEMU_EXTRA_ARGS
 
 qemu-system-x86_64 \
     -pidfile /var/run/qemu.pid \
@@ -86,6 +124,7 @@ qemu-system-x86_64 \
     $QEMU_VNC_ARG \
     $QEMU_UEFI_ARG \
     $QEMU_RTC_ARG \
+    $QEMU_TPM_ARG \
     -usb -device usb-tablet \
     -device virtio-keyboard-pci \
     -device virtio-balloon-pci \

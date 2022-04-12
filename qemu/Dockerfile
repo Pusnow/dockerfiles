@@ -1,3 +1,11 @@
+FROM debian:bullseye AS ovmf
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y \
+    ovmf \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/
+
 FROM alpine:latest
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
@@ -5,8 +13,13 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 RUN apk add --no-cache \
     qemu-img \
     qemu-system-x86_64 \
-    ovmf \
     coreutils
+RUN apk add --no-cache \
+    swtpm \
+    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
+
+COPY --from=ovmf /usr/share/OVMF/ /usr/share/OVMF/
+
 
 ADD run.sh /
 
@@ -31,6 +44,8 @@ ENV QEMU_PORT_2=""
 ENV QEMU_PORT_3=""
 ENV QEMU_VNC=""
 ENV QEMU_UEFI=""
+ENV QEMU_UEFI_SECURE=""
+ENV QEMU_TPM=""
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]
