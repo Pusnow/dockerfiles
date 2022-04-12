@@ -5,6 +5,7 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 RUN apk add --no-cache \
     qemu-img \
     qemu-system-x86_64 \
+    ovmf \
     coreutils
 
 ADD run.sh /
@@ -29,6 +30,7 @@ ENV QEMU_PORT_1="3389"
 ENV QEMU_PORT_2=""
 ENV QEMU_PORT_3=""
 ENV QEMU_VNC=""
+ENV QEMU_UEFI=""
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]

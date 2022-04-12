@@ -1,5 +1,11 @@
 #!/bin/sh
 
+QEMU_UEFI_ARG=""
+if [ ! -z "$QEMU_UEFI" ]; then
+    QEMU_UEFI_ARG="-drive if=pflash,format=raw,readonly=on,file=/usr/share/OVMF/OVMF_CODE.fd"
+    QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS.fd"
+fi
+
 if [ ! -z "$QEMU_RTC" ]; then
     QEMU_RTC_ARG="-rtc base=$QEMU_RTC"
 fi
@@ -74,6 +80,7 @@ qemu-system-x86_64 \
     -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
     -m $QEMU_MEMORY \
     $QEMU_VNC_ARG \
+    $QEMU_UEFI_ARG \
     $QEMU_RTC_ARG \
     -usb -device usb-tablet \
     -device virtio-keyboard-pci \
