@@ -95,31 +95,11 @@ term_handler() {
 }
 trap 'term_handler' TERM
 
-echo qemu-system-x86_64 \
-    -pidfile /var/run/qemu.pid \
-    -qmp unix:/var/run/qmp.sock,server,nowait \
-    -machine q35,accel=kvm \
-    -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
-    -m $QEMU_MEMORY \
-    $QEMU_VNC_ARG \
-    $QEMU_UEFI_ARG \
-    $QEMU_RTC_ARG \
-    $QEMU_TPM_ARG \
-    -usb -device usb-tablet \
-    -device virtio-keyboard-pci \
-    -device virtio-balloon-pci \
-    $QEMU_NET_ARGS \
-    $QEMU_DISK_ARG \
-    $QEMU_DISK2_ARG \
-    $QEMU_ISO_ARG \
-    $QEMU_ISO2_ARG \
-    $QEMU_EXTRA_ARGS
-
 qemu-system-x86_64 \
     -pidfile /var/run/qemu.pid \
     -qmp unix:/var/run/qmp.sock,server,nowait \
     -machine q35,accel=kvm \
-    -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP \
+    -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP,sockets=1,cores=$QEMU_SMP,threads=1 \
     -m $QEMU_MEMORY \
     $QEMU_VNC_ARG \
     $QEMU_UEFI_ARG \
