@@ -79,7 +79,7 @@ fi
 
 QEMU_TPM_ARG=""
 if [ ! -z "$QEMU_TPM" ]; then
-    mkdir /run/tpm
+    mkdir -p /run/tpm
     swtpm socket -d \
         --tpmstate dir=/run/tpm \
         --ctrl type=unixio,path=/run/tpm.sock \
