@@ -10,6 +10,8 @@ if [ ! -z "$QEMU_UEFI" ]; then
         QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd"
     fi
 fi
+QEMU_VGA_ARGS="-vga cirrus"
+
 QEMU_RTC_ARG=""
 if [ ! -z "$QEMU_RTC" ]; then
     QEMU_RTC_ARG="-rtc base=$QEMU_RTC"
@@ -72,9 +74,9 @@ fi
 
 QEMU_VNC_ARG=""
 if [ ! -z "$QEMU_VNC" ]; then
-    QEMU_VNC_ARG="-vnc $QEMU_VNC"
+    QEMU_VNC_ARG="-display vnc=$QEMU_VNC"
 else
-    QEMU_VNC_ARG="-vnc 0.0.0.0:0"
+    QEMU_VNC_ARG="-display vnc=0.0.0.0:0"
 fi
 
 QEMU_TPM_ARG=""
@@ -102,6 +104,7 @@ qemu-system-x86_64 \
     -cpu host$QEMU_CPU_OPT -smp $QEMU_SMP,sockets=1,cores=$QEMU_SMP,threads=1 \
     -m $QEMU_MEMORY \
     $QEMU_VNC_ARG \
+    $QEMU_VGA_ARGS \
     $QEMU_UEFI_ARG \
     $QEMU_RTC_ARG \
     $QEMU_TPM_ARG \
