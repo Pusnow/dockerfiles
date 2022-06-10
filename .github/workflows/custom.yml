@@ -32,6 +32,7 @@ jobs:
             "actions-runner",
             "rsync",
             "stress-ng",
+            "dnsmasq",
           ]
     runs-on: ubuntu-latest
     steps:
