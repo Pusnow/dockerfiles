@@ -33,6 +33,7 @@ jobs:
             "rsync",
             "stress-ng",
             "dnsmasq",
+            "hostapd",
           ]
     runs-on: ubuntu-latest
     steps:
