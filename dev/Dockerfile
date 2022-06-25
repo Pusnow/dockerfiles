@@ -15,7 +15,6 @@ RUN apt-get update \
     iputils-ping \
     wget \
     curl \
-    rsync \
     git \
     htop \
     nload \
@@ -27,17 +26,12 @@ RUN apt-get update \
     # C/C++
     build-essential \
     gdb \
-    cmake \
-    meson \
-    ninja-build \
     # Python
     python3 \
     python3-pip \
     python3-venv \
     # Shell
-    vim \
     shellcheck \
-    sloccount \
     # VM
     qemu-utils \
     podman \
