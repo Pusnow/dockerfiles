@@ -26,7 +26,6 @@ jobs:
             "dev",
             "samba",
             "lighttpd",
-            "elixir",
             "ssh",
             "jenkins",
             "actions-runner",
