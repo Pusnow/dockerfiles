@@ -22,3 +22,5 @@ ENV GID=2000
 
 COPY --chown=root:root  debian-entry.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
+CMD [ "bash" ]
+ENTRYPOINT [ "/entrypoint.sh" ]
