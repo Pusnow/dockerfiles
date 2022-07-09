@@ -16,6 +16,9 @@ RUN \
     libjansson4 \
     libyaml-0-2 \
     wget \
+    autoconf \
+    automake \
+    pkg-config \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
@@ -26,16 +29,20 @@ RUN \
   ln -s /usr/bin/pytest-3 /usr/bin/pytest
 
 
-ARG CTAG_URL=https://bootlin.com/pub/elixir/universal-ctags_0+git20200526-0ubuntu1_amd64.deb
+ARG CTAG_URL=https://github.com/universal-ctags/ctags/archive/refs/tags/p5.9.20220703.0.tar.gz
 ARG PYGMENTS_FNAME=Pygments-2.6.1.elixir-py3-none-any.whl
 ARG PYGMENTS_URL=https://bootlin.com/pub/elixir/${PYGMENTS_FNAME}
 
 
 RUN \
-  wget -O ctag.deb ${CTAG_URL}
+  cd /tmp && \
+  wget -O /tmp/ctag.tar.gz ${CTAG_URL} && \ 
+  tar --strip-components=1 -xzf /tmp/ctag.tar.gz && \
+  ./autogen.sh && \
+  ./configure && \
+  make -j && \
+  make install
 
-RUN \
-  dpkg -i ctag.deb
 
 RUN \
   wget -O ${PYGMENTS_FNAME} ${PYGMENTS_URL}
