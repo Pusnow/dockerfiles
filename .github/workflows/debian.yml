@@ -25,13 +25,11 @@ jobs:
         run: |
           buildah manifest create debian-base-manifest
 
-      - name: Build base amd64 image
+      - name: Build base images
         run: |
-          buildah bud --tag debian-base:latest --manifest debian-base-manifest --arch amd64 debian-base
-
-      - name: Build base arm64 image
-        run: |
-          buildah bud --tag debian-base:latest --manifest debian-base-manifest --arch arm64 debian-base
+          for ARCH in amd64 arm64; do
+            buildah bud --tag debian-base:latest --manifest debian-base-manifest --arch "$ARCH" debian-base
+          done
 
       - name: Log into GitHub Container Registry
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
