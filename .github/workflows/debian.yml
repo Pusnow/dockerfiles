@@ -21,7 +21,6 @@ jobs:
 
       - uses: actions/checkout@v2
 
-
       - name: Declare manifest
         run: |
           buildah manifest create debian-base-manifest
@@ -47,3 +46,44 @@ jobs:
         run: |
           buildah tag debian-base:latest $DH_PATH/debian-base:latest
           buildah manifest push --all debian-base-manifest "docker://$DH_PATH/debian-base:latest"
+
+  images:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        image: 
+          - name: "borg"
+            packages: "borgbackup"
+            cmd: borg
+    steps:
+      - name: Install packages
+        run: |
+          sudo apt update && sudo apt install -y crun qemu-user-static
+      - uses: actions/checkout@v2
+
+      - name: Declare manifest
+        run: |
+          buildah manifest create ${{ matrix.image.name }}-manifest
+
+      - name: Build images
+        run: |
+          for ARCH in $ARCHS; do
+            buildah bud --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}" --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" debian-img
+          done
+
+      - name: Log into GitHub Container Registry
+        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          buildah tag ${{ matrix.image.name }}:latest $CR_PATH/${{ matrix.image.name }}:latest
+          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://$CR_PATH/${{ matrix.image.name }}:latest"
+
+      - name: Log into Docker Hub
+        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
+
+      - name: Push image to Docker Hub
+        run: |
+          buildah tag ${{ matrix.image.name }}:latest $DH_PATH/${{ matrix.image.name }}:latest
+          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://$DH_PATH/${{ matrix.image.name }}:latest"
+

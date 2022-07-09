@@ -18,7 +18,6 @@ jobs:
           [
             "alpine-gui",
             "meshcommander",
-            "borg",
             "texlive",
             "qemu",
             "hugo",
