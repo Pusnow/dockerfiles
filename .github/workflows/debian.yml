@@ -34,7 +34,7 @@ jobs:
           buildah bud --tag debian:latest --manifest debian --arch arm64 debian-base
 
       - name: Log into GitHub Container Registry
-        run: echo "${{ secrets.CR_TOKEN }}" | buildah login -u ${{ secrets.CR_NAME }} --password-stdin https://ghcr.io
+        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" https://ghcr.io
 
       - name: Push image to GitHub Container Registry
         run: |
@@ -42,7 +42,7 @@ jobs:
           buildah manifest push --all debian-base "docker://$CR_PATH/debian:latest"
 
       - name: Log into Docker Hub
-        run: echo "${{ secrets.DH_TOKEN }}" | buildah login -u ${{ secrets.DH_NAME }} --password-stdin https://docker.io
+        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" https://docker.io
 
       - name: Push image to Docker Hub
         run: |
