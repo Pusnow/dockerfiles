@@ -47,4 +47,4 @@ jobs:
       - name: Push image to Docker Hub
         run: |
           buildah tag debian:latest $DH_PATH/debian:latest
-          buildah manifest push --all debian-base "docker://$DH_PATH/debian:latest"
+          buildah manifest push --all debian "docker://$DH_PATH/debian:latest"
