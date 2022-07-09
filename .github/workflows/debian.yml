@@ -7,6 +7,7 @@ on:
   schedule:
     - cron: "0 0 * * 0"
 env:
+  ARCHS: "amd64 arm64"
   CR_PATH: ghcr.io/pusnow
   DH_PATH: docker.io/pusnow
 
@@ -27,7 +28,7 @@ jobs:
 
       - name: Build base images
         run: |
-          for ARCH in amd64 arm64; do
+          for ARCH in $ARCHS; do
             buildah bud --tag debian-base:latest --manifest debian-base-manifest --arch "$ARCH" debian-base
           done
 
