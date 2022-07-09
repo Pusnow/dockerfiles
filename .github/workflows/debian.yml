@@ -27,11 +27,11 @@ jobs:
 
       - name: Build base amd64 image
         run: |
-          buildah bud --tag debian:latest --manifest debian --arch amd64 debian-base
+          buildah bud --tag debian:latest --manifest debian --arch amd64 debian
 
       - name: Build base arm64 image
         run: |
-          buildah bud --tag debian:latest --manifest debian --arch arm64 debian-base
+          buildah bud --tag debian:latest --manifest debian --arch arm64 debian
 
       - name: Log into GitHub Container Registry
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
@@ -39,7 +39,7 @@ jobs:
       - name: Push image to GitHub Container Registry
         run: |
           buildah tag debian:latest $CR_PATH/debian:latest
-          buildah manifest push --all debian-base "docker://$CR_PATH/debian:latest"
+          buildah manifest push --all debian "docker://$CR_PATH/debian:latest"
 
       - name: Log into Docker Hub
         run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
@@ -47,4 +47,4 @@ jobs:
       - name: Push image to Docker Hub
         run: |
           buildah tag debian:latest $DH_PATH/debian:latest
-          buildah manifest push --all debian-base "docker://$DH_PATH/debian:latest"
+          buildah manifest push --all debian "docker://$DH_PATH/debian:latest"
