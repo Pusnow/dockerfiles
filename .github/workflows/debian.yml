@@ -48,6 +48,7 @@ jobs:
           buildah manifest push --all debian-base-manifest "docker://$DH_PATH/debian-base:latest"
 
   images:
+    needs: base
     runs-on: ubuntu-latest
     strategy:
       matrix:
