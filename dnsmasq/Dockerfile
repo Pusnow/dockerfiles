@@ -4,6 +4,7 @@ LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
 RUN apt-get update && apt-get install -y \
     dnsmasq \
+    python3 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
