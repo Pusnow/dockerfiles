@@ -16,7 +16,7 @@ jobs:
     steps:
       - name: Install packages
         run: |
-          apt update && apt install -y crun qemu-user-static
+          sudo apt update && sudo apt install -y crun qemu-user-static
 
       - uses: actions/checkout@v2
 
