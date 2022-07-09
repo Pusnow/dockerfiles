@@ -1,0 +1,50 @@
+name: debian
+
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: "0 0 * * 0"
+env:
+  CR_PATH: ghcr.io/pusnow
+  DH_PATH: docker.io/pusnow
+
+jobs:
+  base:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install packages
+        run: |
+          apt update && apt install -y crun qemu-user-static
+
+      - uses: actions/checkout@v2
+
+
+      - name: Declare manifest
+        run: |
+          buildah manifest create debian
+
+      - name: Build base amd64 image
+        run: |
+          buildah bud --tag debian:latest --manifest debian --arch amd64 debian-base
+
+      - name: Build base arm64 image
+        run: |
+          buildah bud --tag debian:latest --manifest debian --arch arm64 debian-base
+
+      - name: Log into GitHub Container Registry
+        run: echo "${{ secrets.CR_TOKEN }}" | buildah login -u ${{ secrets.CR_NAME }} --password-stdin https://ghcr.io
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          buildah tag debian:latest $CR_PATH/debian:latest
+          buildah manifest push --all debian-base "docker://$CR_PATH/debian:latest"
+
+      - name: Log into Docker Hub
+        run: echo "${{ secrets.DH_TOKEN }}" | buildah login -u ${{ secrets.DH_NAME }} --password-stdin https://docker.io
+
+      - name: Push image to Docker Hub
+        run: |
+          buildah tag debian:latest $DH_PATH/debian:latest
+          buildah manifest push --all debian-base "docker://$DH_PATH/debian:latest"
