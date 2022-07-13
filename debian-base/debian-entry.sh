@@ -2,9 +2,15 @@
 set -e
 set -x
 
-UID="${UID:-2000}"
-GID="${GID:-2000}"
+UID="${UID:-0}"
+GID="${GID:-0}"
 
-groupadd -g "${GID}" leaf && useradd -u "${UID}" -g "${GID}" -l leaf
+groupadd -g "${GID}" -f leaf
 
-exec sudo -u leaf $@
+if [ "${UID}" = "$(id -u)" ]; then
+    usermod -g "${GID}" "$(whoami)"
+    exec $@
+else
+    useradd -u "${UID}" -g "${GID}" -l leaf
+    exec sudo -u leaf $@
+fi

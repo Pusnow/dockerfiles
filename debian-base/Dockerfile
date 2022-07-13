@@ -17,8 +17,8 @@ ENV TZ="Asia/Seoul"
 
 
 # 3. Entrypint
-ENV UID=2000
-ENV GID=2000
+ENV UID=0
+ENV GID=0
 
 COPY --chown=root:root  debian-entry.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
