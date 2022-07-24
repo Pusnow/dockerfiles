@@ -12,7 +12,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
-ADD run.sh /
+COPY run.sh /
 
 EXPOSE 5900
 
