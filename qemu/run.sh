@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/bin/bash
+# shellcheck disable=SC2039
 # shellcheck disable=SC2153
 # shellcheck disable=SC2154
 
@@ -62,17 +63,15 @@ if [ -n "${QEMU_MAC}" ]; then
 fi
 
 QEMU_NET_HOSTFWD=""
-if [ -n "${QEMU_PORT_1}" ]; then
-    QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${QEMU_PORT_1}-:${QEMU_PORT_1},hostfwd=udp::${QEMU_PORT_1}-:${QEMU_PORT_1}"
-fi
 
-if [ -n "${QEMU_PORT_2}" ]; then
-    QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${QEMU_PORT_2}-:${QEMU_PORT_2},hostfwd=udp::${QEMU_PORT_2}-:${QEMU_PORT_2}"
-fi
 
-if [ -n "${QEMU_PORT_3}" ]; then
-    QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${QEMU_PORT_3}-:${QEMU_PORT_3},hostfwd=udp::${QEMU_PORT_3}-:${QEMU_PORT_3}"
-fi
+for TCP_PORT in ${QEMU_TCP_PORTS//,/ }; do
+    QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${TCP_PORT}-:${TCP_PORT}"
+done
+
+for UDP_PORT in ${QEMU_UDP_PORTS//,/ }; do
+    QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=udp::${UDP_PORT}-:${UDP_PORT}"
+done
 
 QEMU_VHOST_ARGS=""
 if [ -n "${QEMU_VHOST}" ]; then
