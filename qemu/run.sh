@@ -49,13 +49,9 @@ if [ -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2}" ]; then
 fi
 
 QEMU_ISO_ARG=""
-if [ -f "${QEMU_ISO}" ] && [ -n "${QEMU_ISO}" ]; then
-    QEMU_ISO_ARG="-drive file=${QEMU_ISO},media=cdrom"
-fi
-QEMU_ISO2_ARG=""
-if [ -f "${QEMU_ISO2}" ] && [ -n "${QEMU_ISO2}" ]; then
-    QEMU_ISO2_ARG="-drive file=${QEMU_ISO2},media=cdrom"
-fi
+for ISO in ${QEMU_ISOS//,/ }; do
+    QEMU_ISO_ARG="${QEMU_ISO_ARG} -drive file=${ISO},media=cdrom"
+done
 
 QEMU_MAC_ARGS=""
 if [ -n "${QEMU_MAC}" ]; then
@@ -63,8 +59,6 @@ if [ -n "${QEMU_MAC}" ]; then
 fi
 
 QEMU_NET_HOSTFWD=""
-
-
 for TCP_PORT in ${QEMU_TCP_PORTS//,/ }; do
     QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${TCP_PORT}-:${TCP_PORT}"
 done
@@ -129,7 +123,6 @@ qemu-system-x86_64 \
     ${QEMU_DISK_ARG} \
     ${QEMU_DISK2_ARG} \
     ${QEMU_ISO_ARG} \
-    ${QEMU_ISO2_ARG} \
     ${QEMU_EXTRA_ARGS} &
 
 while [ ! -f /var/run/qemu.pid ]; do
