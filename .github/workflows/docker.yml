@@ -45,9 +45,15 @@ jobs:
     strategy:
       matrix:
         image: 
-          - name: "borg"
-            packages: "borgbackup"
+          - name: borg
+            packages: borgbackup
             cmd: borg
+          - name: dnsmasq
+            packages: dnsmasq
+            cmd: /usr/sbin/dnsmasq
+          - name: hostapd
+            packages: hostapd iw wireless-tools
+            cmd: /usr/sbin/hostapd
     steps:
       - name: Install packages
         run: |
@@ -84,12 +90,8 @@ jobs:
           - hugo
           - code-server
           - dev
-          - samba
           - actions-runner
-          - rsync
           - stress-ng
-          - dnsmasq
-          - hostapd
     steps:
       - name: Install packages
         run: |
