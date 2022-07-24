@@ -39,13 +39,13 @@ jobs:
           buildah tag debian-base:latest $CR_PATH/debian-base:latest
           buildah manifest push --all debian-base-manifest "docker://$CR_PATH/debian-base:latest"
 
-      - name: Log into Docker Hub
-        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
+      # - name: Log into Docker Hub
+      #   run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
 
-      - name: Push image to Docker Hub
-        run: |
-          buildah tag debian-base:latest $DH_PATH/debian-base:latest
-          buildah manifest push --all debian-base-manifest "docker://$DH_PATH/debian-base:latest"
+      # - name: Push image to Docker Hub
+      #   run: |
+      #     buildah tag debian-base:latest $DH_PATH/debian-base:latest
+      #     buildah manifest push --all debian-base-manifest "docker://$DH_PATH/debian-base:latest"
 
   images:
     needs: base
@@ -80,11 +80,11 @@ jobs:
           buildah tag ${{ matrix.image.name }}:latest $CR_PATH/${{ matrix.image.name }}:latest
           buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://$CR_PATH/${{ matrix.image.name }}:latest"
 
-      - name: Log into Docker Hub
-        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
+      # - name: Log into Docker Hub
+      #   run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
 
-      - name: Push image to Docker Hub
-        run: |
-          buildah tag ${{ matrix.image.name }}:latest $DH_PATH/${{ matrix.image.name }}:latest
-          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://$DH_PATH/${{ matrix.image.name }}:latest"
+      # - name: Push image to Docker Hub
+      #   run: |
+      #     buildah tag ${{ matrix.image.name }}:latest $DH_PATH/${{ matrix.image.name }}:latest
+      #     buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://$DH_PATH/${{ matrix.image.name }}:latest"
 

@@ -64,13 +64,13 @@ jobs:
           buildah tag ${{matrix.image}}:latest $CR_PATH/${{matrix.image}}:latest
           buildah manifest push --all ${{ matrix.image }}-manifest "docker://$CR_PATH/${{ matrix.image }}:latest"
 
-      - name: Log into Docker Hub
-        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
+      # - name: Log into Docker Hub
+      #   run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
 
-      - name: Push image to Docker Hub
-        run: |
-          buildah tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
-          buildah manifest push --all ${{ matrix.image }}-manifest "docker://$DH_PATH/${{ matrix.image }}:latest"
+      # - name: Push image to Docker Hub
+      #   run: |
+      #     buildah tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
+      #     buildah manifest push --all ${{ matrix.image }}-manifest "docker://$DH_PATH/${{ matrix.image }}:latest"
 
   stage2:
     needs: stage1
@@ -107,10 +107,10 @@ jobs:
           buildah tag ${{matrix.image}}:latest $CR_PATH/${{matrix.image}}:latest
           buildah manifest push --all ${{ matrix.image }}-manifest "docker://$CR_PATH/${{ matrix.image }}:latest"
 
-      - name: Log into Docker Hub
-        run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
+      # - name: Log into Docker Hub
+      #   run: buildah login -u ${{ secrets.DH_NAME }} -p "${{ secrets.DH_TOKEN }}" docker.io
 
-      - name: Push image to Docker Hub
-        run: |
-          buildah tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
-          buildah manifest push --all ${{ matrix.image }}-manifest "docker://$DH_PATH/${{ matrix.image }}:latest"
+      # - name: Push image to Docker Hub
+      #   run: |
+      #     buildah tag ${{matrix.image}}:latest $DH_PATH/${{matrix.image}}:latest
+      #     buildah manifest push --all ${{ matrix.image }}-manifest "docker://$DH_PATH/${{ matrix.image }}:latest"
