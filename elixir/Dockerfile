@@ -61,7 +61,7 @@ COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN a2enmod cgi rewrite
 
 
-COPY update.sh /update.sh
+COPY run.sh /run.sh
 COPY project-name.py /project-name.py
 
 # ENV LXR_REPO_DIR /srv/elixir-data/$PROJECT/repo
@@ -78,4 +78,4 @@ COPY project-name.py /project-name.py
 EXPOSE 80
 
 VOLUME [ "/data" ]
-ENTRYPOINT ["/update.sh"]
+CMD ["/run.sh"]

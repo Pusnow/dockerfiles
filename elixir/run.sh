@@ -1,7 +1,7 @@
 #!/bin/bash
 pushd /data || exit
 
-for url in "$@"; do
+for url in ${GIT_URLS//;/ }; do
     project_name=$(/project-name.py $url)
     mkdir -p  /data/$project_name/data
     mkdir -p  /data/$project_name/repo
@@ -23,4 +23,4 @@ first_project=$(ls -1 /data | head -1)
 echo "Define elixir_home ${first_project}" > /etc/apache2/conf-enabled/elixir_home.conf
 
 
-/usr/sbin/apache2ctl -D FOREGROUND
+exec /usr/sbin/apache2ctl -D FOREGROUND

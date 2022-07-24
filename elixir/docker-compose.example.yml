@@ -7,6 +7,7 @@ services:
         - data:/data
     ports:
         - "8080:80"
-    command: ["https://github.com/torvalds/linux.git", "git://git.musl-libc.org/musl"]
+    environment:
+      - GIT_URLS=https://github.com/torvalds/linux.git;git://git.musl-libc.org/musl
 volumes:
   data:
