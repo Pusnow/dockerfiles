@@ -1,4 +1,4 @@
-FROM ghcr.io/pusnow/debian-base:latest
+FROM ghcr.io/pusnow/debian-base:bullseye
 
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles

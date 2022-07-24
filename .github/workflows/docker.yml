@@ -14,6 +14,11 @@ env:
 jobs:
   base:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        tag: 
+          - bullseye
+          - bookworm
     steps:
       - name: Install packages
         run: |
@@ -28,7 +33,7 @@ jobs:
       - name: Build base images
         run: |
           for ARCH in $ARCHS; do
-            buildah bud --tag debian-base:latest --manifest debian-base-manifest --arch "$ARCH" debian-base
+            buildah bud --build-arg DEBIAN_TAG=${{ matrix.tag }} --tag debian-base:${{ matrix.tag }} --manifest debian-base-manifest --arch "$ARCH" debian-base
           done
 
       - name: Log into GitHub Container Registry
@@ -36,8 +41,8 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag debian-base:latest $CR_PATH/debian-base:latest
-          buildah manifest push --all debian-base-manifest "docker://$CR_PATH/debian-base:latest"
+          buildah tag debian-base:${{ matrix.tag }} $CR_PATH/debian-base:${{ matrix.tag }}
+          buildah manifest push --all debian-base-manifest "docker://$CR_PATH/debian-base:${{ matrix.tag }}"
 
   debian:
     needs: base
