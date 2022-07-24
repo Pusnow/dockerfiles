@@ -49,7 +49,7 @@ if [ -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2}" ]; then
 fi
 
 QEMU_ISO_ARG=""
-for ISO in ${QEMU_ISOS//,/ }; do
+for ISO in ${QEMU_ISOS//;/ }; do
     QEMU_ISO_ARG="${QEMU_ISO_ARG} -drive file=${ISO},media=cdrom"
 done
 
@@ -59,11 +59,11 @@ if [ -n "${QEMU_MAC}" ]; then
 fi
 
 QEMU_NET_HOSTFWD=""
-for TCP_PORT in ${QEMU_TCP_PORTS//,/ }; do
+for TCP_PORT in ${QEMU_TCP_PORTS//;/ }; do
     QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=tcp::${TCP_PORT}-:${TCP_PORT}"
 done
 
-for UDP_PORT in ${QEMU_UDP_PORTS//,/ }; do
+for UDP_PORT in ${QEMU_UDP_PORTS//;/ }; do
     QEMU_NET_HOSTFWD="${QEMU_NET_HOSTFWD},hostfwd=udp::${UDP_PORT}-:${UDP_PORT}"
 done
 
