@@ -1,25 +1,16 @@
-FROM debian:bullseye AS ovmf
-RUN apt-get update \
-    && apt-get upgrade -y \
-    && apt-get install -y \
-    ovmf \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /var/cache/apt/
-
-FROM alpine:latest
+FROM debian:bullseye-slim
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
-RUN apk add --no-cache \
-    qemu-img \
-    qemu-system-x86_64 \
-    coreutils
-RUN apk add --no-cache \
-    swtpm \
-    --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/
 
-COPY --from=ovmf /usr/share/OVMF/ /usr/share/OVMF/
-
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+    ovmf \
+    qemu-utils \
+    qemu-system-x86\
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/
 
 ADD run.sh /
 
