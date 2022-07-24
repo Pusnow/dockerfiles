@@ -22,5 +22,7 @@ ENV GID=0
 
 COPY --chown=root:root  debian-entry.sh /entrypoint.sh
 RUN chmod 755 /entrypoint.sh
+
+VOLUME [ "/conf", "/data" ]
 CMD [ "bash" ]
 ENTRYPOINT [ "/entrypoint.sh" ]
