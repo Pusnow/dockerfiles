@@ -1,4 +1,4 @@
-FROM  debian:testing
+FROM ghcr.io/pusnow/debian-base:bookworm
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 

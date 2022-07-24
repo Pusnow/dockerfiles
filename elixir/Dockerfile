@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM ghcr.io/pusnow/debian-base:bullseye
 
 
 RUN \
