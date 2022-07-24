@@ -20,11 +20,23 @@ if [ -n "${QEMU_RTC}" ]; then
 fi
 
 if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
-    qemu-img create -f qcow2 "${QEMU_DISK}" "${QEMU_DISK_INITIALIZE}"
+    if [ -n "${QEMU_DISK_URL}" ]; then
+        wget -O "${QEMU_DISK}" "${QEMU_DISK_URL}"
+        qemu-img resize "${QEMU_DISK}" "${QEMU_DISK_INITIALIZE}"
+    else
+        qemu-img create -f qcow2 "${QEMU_DISK}" "${QEMU_DISK_INITIALIZE}"
+    fi
+    qemu-img info "${QEMU_DISK}"
 fi
 
 if [ ! -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2_INITIALIZE}" ]; then
-    qemu-img create -f qcow2 "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
+    if [ -n "${QEMU_DISK2_URL}" ]; then
+        wget -O "${QEMU_DISK2}" "${QEMU_DISK2_URL}"
+        qemu-img resize "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
+    else
+        qemu-img create -f qcow2 "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
+    fi
+    qemu-img info "${QEMU_DISK2}"
 fi
 QEMU_DISK_ARG=""
 if [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK}" ]; then
