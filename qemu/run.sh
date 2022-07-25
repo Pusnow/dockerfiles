@@ -102,7 +102,7 @@ if [ -n "${QEMU_TPM}" ]; then
 fi
 
 term_handler() {
-    stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | nc local:/var/run/qmp.sock
+    stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | socat UNIX-CONNECT:/var/run/qmp.sock -
 }
 trap 'term_handler' TERM
 
