@@ -3,6 +3,8 @@
 # shellcheck disable=SC2153
 # shellcheck disable=SC2154
 
+set -e
+
 QEMU_UEFI_ARG=""
 if [ -n "${QEMU_UEFI}" ]; then
     if [ -z "${QEMU_UEFI_SECURE}" ]; then

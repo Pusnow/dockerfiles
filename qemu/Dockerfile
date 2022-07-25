@@ -7,6 +7,7 @@ RUN apt-get update \
     && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
     wget \
+    ca-certificates \
     netcat \
     ovmf \
     qemu-utils \
