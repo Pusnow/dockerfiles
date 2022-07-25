@@ -41,11 +41,11 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag debian-base:${{ matrix.tag }} ${{ CR_PATH }}/debian-base:${{ matrix.tag }}
-          buildah manifest push --all debian-base-manifest "docker://${{ CR_PATH }}/debian-base:${{ matrix.tag }}"
+          buildah tag debian-base:${{ matrix.tag }} ${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}
+          buildah manifest push --all debian-base-manifest "docker://${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}"
       - uses: azure/container-scan@v0
         with:
-          image-name: ${{ CR_PATH }}/debian-base:${{ matrix.tag }}
+          image-name: ${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}
   debian:
     needs: base
     runs-on: ubuntu-latest
@@ -81,11 +81,11 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag ${{ matrix.image.name }}:latest ${{ CR_PATH }}/${{ matrix.image.name }}:latest
-          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ CR_PATH }}/${{ matrix.image.name }}:latest"
+          buildah tag ${{ matrix.image.name }}:latest ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
+          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:latest"
       - uses: azure/container-scan@v0
         with:
-          image-name: ${{ CR_PATH }}/${{ matrix.image.name }}:latest
+          image-name: ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
 
   custom:
     needs: base
@@ -120,9 +120,9 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag ${{ matrix.image }}:latest ${{ CR_PATH }}/${{ matrix.image }}:latest
-          buildah manifest push --all ${{ matrix.image }}-manifest "docker://${{ CR_PATH }}/${{ matrix.image }}:latest"
+          buildah tag ${{ matrix.image }}:latest ${{ env.CR_PATH }}/${{ matrix.image }}:latest
+          buildah manifest push --all ${{ matrix.image }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image }}:latest"
 
       - uses: azure/container-scan@v0
         with:
-          image-name: ${{ CR_PATH }}/${{ matrix.image }}:latest
+          image-name: ${{ env.CR_PATH }}/${{ matrix.image }}:latest
