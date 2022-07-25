@@ -57,7 +57,6 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US:en
 ENV LC_ALL en_US.UTF-8
 
-COPY entrypoint.sh /entrypoint.sh
 EXPOSE 22
 VOLUME [ "/root", "/ssh", "/etc/containers"]
-ENTRYPOINT [ "/entrypoint.sh" ]
+COPY entrypoint.sh /entrypoint.sh

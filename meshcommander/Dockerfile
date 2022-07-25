@@ -8,7 +8,7 @@ RUN apk add --no-cache \
 RUN mkdir /app; cd /app; npm install meshcommander
 
 WORKDIR /app/node_modules
-ADD entrypoint.sh /
 
 VOLUME [ "/root", "/keys" ]
+COPY entrypoint.sh /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]

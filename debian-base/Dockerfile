@@ -21,9 +21,9 @@ ENV TZ="Asia/Seoul"
 ENV UID=0
 ENV GID=0
 
-COPY --chown=root:root  debian-entry.sh /entrypoint.sh
-RUN chmod 755 /entrypoint.sh
+COPY --chown=root:root  debian-entry.sh /__entrypoint.sh
+RUN chmod 755 /__entrypoint.sh
 
 VOLUME [ "/conf", "/data" ]
 CMD [ "bash" ]
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT [ "/__entrypoint.sh" ]
