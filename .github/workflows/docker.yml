@@ -89,7 +89,6 @@ jobs:
     strategy:
       matrix:
         image: 
-          - meshcommander
           - texlive
           - qemu
           - hugo
