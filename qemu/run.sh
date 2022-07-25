@@ -15,7 +15,7 @@ if [ -n "${QEMU_UEFI}" ]; then
         QEMU_UEFI_ARG="${QEMU_UEFI_ARG} -drive if=pflash,format=raw,file=/usr/share/OVMF/OVMF_VARS_4M.fd"
     fi
 fi
-QEMU_VGA_ARGS="-vga cirrus"
+QEMU_VGA_ARGS="-vga virtio"
 
 QEMU_RTC_ARG=""
 if [ -n "${QEMU_RTC}" ]; then
