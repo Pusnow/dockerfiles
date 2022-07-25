@@ -3,7 +3,9 @@ FROM debian:${DEBIAN_TAG}-slim
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    DEBIAN_FRONTEND=noninteractive \
     apt-get install -y \
     sudo \
     tzdata \
