@@ -1,6 +1,5 @@
 ARG DEBIAN_TAG="latest"
 FROM debian:${DEBIAN_TAG}-slim
-
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
