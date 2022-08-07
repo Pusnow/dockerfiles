@@ -60,3 +60,4 @@ ENV LC_ALL en_US.UTF-8
 EXPOSE 22
 VOLUME [ "/root", "/ssh", "/etc/containers"]
 COPY entrypoint.sh /entrypoint.sh
+CMD []
