@@ -118,7 +118,7 @@ qemu-system-x86_64 \
     ${QEMU_UEFI_ARG} \
     ${QEMU_RTC_ARG} \
     ${QEMU_TPM_ARG} \
-    -usb -device usb-tablet \
+    -device virtio-tablet-pci \
     -device virtio-keyboard-pci \
     -device virtio-balloon-pci \
     -device virtio-rng-pci \
