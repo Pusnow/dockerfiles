@@ -121,6 +121,7 @@ qemu-system-x86_64 \
     -usb -device usb-tablet \
     -device virtio-keyboard-pci \
     -device virtio-balloon-pci \
+    -device virtio-rng-pci \
     ${QEMU_NET_ARGS} \
     ${QEMU_DISK_ARG} \
     ${QEMU_DISK2_ARG} \
