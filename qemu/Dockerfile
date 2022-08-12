@@ -9,6 +9,7 @@ RUN apt-get update \
     wget \
     ca-certificates \
     socat \
+    colorized-logs \
     ovmf \
     qemu-utils \
     qemu-system-x86\
@@ -43,6 +44,7 @@ ENV QEMU_VNC=""
 ENV QEMU_UEFI=""
 ENV QEMU_UEFI_SECURE=""
 ENV QEMU_TPM=""
+ENV QEMU_CONSOLE=""
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]

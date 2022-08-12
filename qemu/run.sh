@@ -88,6 +88,15 @@ else
     QEMU_VNC_ARG="-display vnc=0.0.0.0:0"
 fi
 
+QEMU_CONSOLE_ARG=""
+if [ -n "${QEMU_CONSOLE}" ]; then
+    touch /var/run/console.log
+    tail -f /var/run/console.log | ansi2txt &
+    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -device virtio-serial-pci"
+    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -chardev socket,path=/var/run/console.sock,server=on,wait=off,logfile=/var/run/console.log,id=console0"
+    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -serial chardev:console0"
+fi
+
 QEMU_TPM_ARG=""
 if [ -n "${QEMU_TPM}" ]; then
     mkdir -p /run/tpm
@@ -122,6 +131,7 @@ qemu-system-x86_64 \
     -device virtio-keyboard-pci \
     -device virtio-balloon-pci \
     -device virtio-rng-pci \
+    ${QEMU_CONSOLE_ARG} \
     ${QEMU_NET_ARGS} \
     ${QEMU_DISK_ARG} \
     ${QEMU_DISK2_ARG} \

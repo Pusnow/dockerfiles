@@ -12,4 +12,5 @@ docker run -it --rm \
     -p 5901:5901 \
     -e QEMU_VNC="0.0.0.0:1" \
     -e QEMU_DISK_URL="https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-nocloud-amd64.qcow2" \
+    -e QEMU_CONSOLE="Y" \
     qemu-testing
