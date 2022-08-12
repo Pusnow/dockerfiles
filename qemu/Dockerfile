@@ -10,6 +10,7 @@ RUN apt-get update \
     ca-certificates \
     socat \
     colorized-logs \
+    xz-utils \
     ovmf \
     qemu-utils \
     qemu-system-x86\
