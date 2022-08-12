@@ -6,6 +6,7 @@ set -e
 docker build -t qemu-testing .
 
 docker run -it --rm \
+    --name qemu-testing \
     --device /dev/kvm \
     --volume /tmp/disks:/disks \
     -p 5901:5901 \
