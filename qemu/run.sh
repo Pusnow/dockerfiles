@@ -93,6 +93,12 @@ else
     QEMU_VNC_ARG="-display vnc=0.0.0.0:0"
 fi
 
+QEMU_CLOUD_INIT_ARG=""
+if [ -n "${QEMU_CLOUD_INIT}" ] && [ -f "${QEMU_CLOUD_INIT}" ]; then
+    cloud-localds /var/run/seed.img "${QEMU_CLOUD_INIT}"
+    QEMU_CLOUD_INIT_ARG="-drive file=/var/run/seed.img,if=virtio,format=raw"
+fi
+
 QEMU_CONSOLE_ARG=""
 if [ -n "${QEMU_CONSOLE}" ]; then
     touch /var/run/console.log
@@ -141,6 +147,7 @@ qemu-system-x86_64 \
     ${QEMU_DISK_ARG} \
     ${QEMU_DISK2_ARG} \
     ${QEMU_ISO_ARG} \
+    ${QEMU_CLOUD_INIT_ARG} \
     ${QEMU_EXTRA_ARGS} &
 
 while [ ! -f /var/run/qemu.pid ]; do
