@@ -11,6 +11,7 @@ RUN apt-get update \
     socat \
     colorized-logs \
     xz-utils \
+    cloud-utils \
     ovmf \
     qemu-utils \
     qemu-system-x86\
