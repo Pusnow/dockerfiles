@@ -25,10 +25,12 @@ fi
 if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     if [ -n "${QEMU_DISK_URL}" ]; then
         if [[ "${QEMU_DISK_URL}" = *.qcow2.xz ]]; then
-            wget -O "${QEMU_DISK}.xz" "${QEMU_DISK_URL}"
+            echo "Downloading ${QEMU_DISK_URL}"
+            wget -q -O "${QEMU_DISK}.xz" "${QEMU_DISK_URL}"
             xz -d "${QEMU_DISK}.xz"
         else
-            wget -O "${QEMU_DISK}" "${QEMU_DISK_URL}"
+            echo "Downloading ${QEMU_DISK_URL}"
+            wget -q -O "${QEMU_DISK}" "${QEMU_DISK_URL}"
         fi
         qemu-img resize "${QEMU_DISK}" "${QEMU_DISK_INITIALIZE}"
     else
@@ -39,7 +41,8 @@ fi
 
 if [ ! -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2_INITIALIZE}" ]; then
     if [ -n "${QEMU_DISK2_URL}" ]; then
-        wget -O "${QEMU_DISK2}" "${QEMU_DISK2_URL}"
+        echo "Downloading ${QEMU_DISK2_URL}"
+        wget -q -O "${QEMU_DISK2}" "${QEMU_DISK2_URL}"
         qemu-img resize "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
     else
         qemu-img create -f qcow2 "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
