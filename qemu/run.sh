@@ -22,6 +22,13 @@ if [ -n "${QEMU_RTC}" ]; then
     QEMU_RTC_ARG="-rtc base=${QEMU_RTC}"
 fi
 
+QEMU_SNAPSHOT_ARG=""
+if [ -n "${QEMU_SNAPSHOT}" ]; then
+    QEMU_SNAPSHOT_ARG="-snapshot"
+elif [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_SNAPSHOT_IF_EXIST}" ]; then
+    QEMU_SNAPSHOT_ARG="-snapshot"
+fi
+
 if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     if [ -n "${QEMU_DISK_URL}" ]; then
         if [[ "${QEMU_DISK_URL}" = *.qcow2.xz ]]; then
@@ -133,6 +140,7 @@ qemu-system-x86_64 \
     -device virtio-rng-pci \
     ${QEMU_CONSOLE_ARG} \
     ${QEMU_NET_ARGS} \
+    ${QEMU_SNAPSHOT_ARG} \
     ${QEMU_DISK_ARG} \
     ${QEMU_ISO_ARG} \
     ${QEMU_CLOUD_INIT_ARG} \
