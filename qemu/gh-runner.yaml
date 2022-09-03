@@ -1,0 +1,50 @@
+#cloud-config
+packages_update: true
+packages_upgrade: true
+packages:
+  - curl
+  - jq
+  - git
+  - python3
+  - python3-pip
+  - build-essential
+  - cmake
+runcmd:
+  - ["mkdir", "/opt/actions-runner"]
+  - ["cd", "/opt/actions-runner"]
+  - ["curl", "-O", "-L", "https://github.com/actions/runner/releases/download/v2.296.1/actions-runner-linux-x64-2.296.1.tar.gz"]
+  - ["tar", "xzf", "./actions-runner-linux-x64-2.296.1.tar.gz"]
+  - ["rm", "./actions-runner-linux-x64-2.296.1.tar.gz"]
+  - ["shutdown", "-h", "now"]
+
+write_files:
+  - content: |
+      #!/bin/sh
+      echo "============== Starting GitHub Self-Hosted Runner ==================="
+      if [ ! -f /opt/notfirstboot ]; then
+        echo "First Boot Exiting..."
+        touch /opt/notfirstboot 
+        exit 0
+      fi
+      cd /opt/actions-runner
+
+      TOKEN="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/token/raw | jq -r '.token' || true)"
+      ORG="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/org/raw || true)"
+      NAME="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/name/raw || true)"
+      LABEL="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/label/raw || true)"
+      RUNNER_GROUP="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/group/raw || true)"
+
+      export RUNNER_ALLOW_RUNASROOT="1"
+      ./config.sh \
+        --url https://github.com/${ORG} \
+        --name "${NAME}" \
+        --token "${TOKEN}" \
+        --runnergroup "${RUNNER_GROUP}" \
+        --labels "${LABEL}" \
+        --disableupdate --ephemeral --unattended --replace
+      ./run.sh
+      echo "============== Exiting GitHub Self-Hosted Runner ==================="
+      shutdown -h now
+    path: /var/lib/cloud/scripts/per-boot/00-gh-runner.sh
+    owner: root:root
+    permissions: '0755'
