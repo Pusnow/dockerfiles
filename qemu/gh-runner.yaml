@@ -20,12 +20,13 @@ runcmd:
 write_files:
   - content: |
       #!/bin/sh
-      echo "============== Starting GitHub Self-Hosted Runner ==================="
       if [ ! -f /opt/notfirstboot ]; then
         echo "First Boot Exiting..."
         touch /opt/notfirstboot 
         exit 0
       fi
+
+      echo "============== Starting GitHub Self-Hosted Runner ==================="
       cd /opt/actions-runner
 
       TOKEN="$(cat /sys/firmware/qemu_fw_cfg/by_name/opt/runner/token/raw | jq -r '.token' || true)"
