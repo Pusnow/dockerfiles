@@ -39,23 +39,9 @@ if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     qemu-img info "${QEMU_DISK}"
 fi
 
-if [ ! -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2_INITIALIZE}" ]; then
-    if [ -n "${QEMU_DISK2_URL}" ]; then
-        echo "Downloading ${QEMU_DISK2_URL}"
-        wget -q -O "${QEMU_DISK2}" "${QEMU_DISK2_URL}"
-        qemu-img resize "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
-    else
-        qemu-img create -f qcow2 "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
-    fi
-    qemu-img info "${QEMU_DISK2}"
-fi
 QEMU_DISK_ARG=""
 if [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK}" ]; then
     QEMU_DISK_ARG="-drive file=${QEMU_DISK},if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
-fi
-QEMU_DISK2_ARG=""
-if [ -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2}" ]; then
-    QEMU_DISK2_ARG="-drive file=${QEMU_DISK2},if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
 fi
 
 QEMU_ISO_ARG=""
@@ -148,7 +134,6 @@ qemu-system-x86_64 \
     ${QEMU_CONSOLE_ARG} \
     ${QEMU_NET_ARGS} \
     ${QEMU_DISK_ARG} \
-    ${QEMU_DISK2_ARG} \
     ${QEMU_ISO_ARG} \
     ${QEMU_CLOUD_INIT_ARG} \
     ${QEMU_EXTRA_ARGS} &
