@@ -25,7 +25,7 @@ fi
 QEMU_SNAPSHOT_ARG=""
 if [ -n "${QEMU_SNAPSHOT}" ]; then
     QEMU_SNAPSHOT_ARG="-snapshot"
-elif [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_SNAPSHOT_IF_EXIST}" ]; then
+elif [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_SNAPSHOT_IF_EXIST}" ]; then
     QEMU_SNAPSHOT_ARG="-snapshot"
 fi
 
