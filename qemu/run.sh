@@ -33,11 +33,11 @@ if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     if [ -n "${QEMU_DISK_URL}" ]; then
         if [[ "${QEMU_DISK_URL}" = *.qcow2.xz ]]; then
             echo "Downloading ${QEMU_DISK_URL}"
-            wget -q -O "${QEMU_DISK}.xz" "${QEMU_DISK_URL}"
+            curl -fsSL -o "${QEMU_DISK}.xz" "${QEMU_DISK_URL}"
             xz -d "${QEMU_DISK}.xz"
         else
             echo "Downloading ${QEMU_DISK_URL}"
-            wget -q -O "${QEMU_DISK}" "${QEMU_DISK_URL}"
+            curl -fsSL -o "${QEMU_DISK}" "${QEMU_DISK_URL}"
         fi
         qemu-img resize "${QEMU_DISK}" "${QEMU_DISK_INITIALIZE}"
     else
