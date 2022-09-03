@@ -5,6 +5,12 @@ set -x
 UID="${UID:-0}"
 GID="${GID:-0}"
 
+if [ -d "/init.d/" ]; then
+    for SCRIPT in /init.d/*.sh; do
+        $SCRIPT
+    done
+fi
+
 groupadd -g "${GID}" -f leaf
 
 if [ "${UID}" = "$(id -u)" ]; then
