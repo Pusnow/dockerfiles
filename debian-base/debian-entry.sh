@@ -7,7 +7,7 @@ GID="${GID:-0}"
 
 if [ -d "/init.d/" ]; then
     for SCRIPT in /init.d/*.sh; do
-        $SCRIPT
+        . "${SCRIPT}"
     done
 fi
 
