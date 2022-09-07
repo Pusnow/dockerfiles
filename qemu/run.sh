@@ -48,7 +48,16 @@ fi
 
 QEMU_DISK_ARG=""
 if [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK}" ]; then
-    QEMU_DISK_ARG="-drive file=${QEMU_DISK},if=virtio,cache=writeback,cache.direct=on,aio=native,format=qcow2"
+
+    QEMU_DISK_AIO_ARG=""
+    if [ -n "${QEMU_DISK_AIO}" ]; then
+        QEMU_DISK_AIO_ARG=",aio=${QEMU_DISK_AIO}"
+    fi
+    QEMU_DISK_CACHE_ARG=""
+    if [ -n "${QEMU_DISK_CACHE}" ]; then
+        QEMU_DISK_CACHE_ARG=",cache=${QEMU_DISK_CACHE}"
+    fi
+    QEMU_DISK_ARG="-drive file=${QEMU_DISK},if=virtio,${QEMU_DISK_CACHE_ARG}${QEMU_DISK_AIO_ARG},format=qcow2"
 fi
 
 QEMU_ISO_ARG=""
