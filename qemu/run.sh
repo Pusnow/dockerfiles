@@ -57,7 +57,7 @@ if [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK}" ]; then
     if [ -n "${QEMU_DISK_CACHE}" ]; then
         QEMU_DISK_CACHE_ARG=",cache=${QEMU_DISK_CACHE}"
     fi
-    QEMU_DISK_ARG="-drive file=${QEMU_DISK},if=virtio,${QEMU_DISK_CACHE_ARG}${QEMU_DISK_AIO_ARG},format=qcow2"
+    QEMU_DISK_ARG="-drive file=${QEMU_DISK},if=virtio${QEMU_DISK_CACHE_ARG}${QEMU_DISK_AIO_ARG},format=qcow2"
 fi
 
 QEMU_ISO_ARG=""
