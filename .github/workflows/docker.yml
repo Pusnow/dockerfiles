@@ -56,7 +56,7 @@ jobs:
             packages: borgbackup
             cmd: borg
           - name: dnsmasq
-            packages: dnsmasq
+            packages: dnsmasq iptables
             cmd: /usr/sbin/dnsmasq
           - name: hostapd
             packages: hostapd iw wireless-tools
