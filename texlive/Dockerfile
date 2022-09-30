@@ -14,6 +14,7 @@ RUN apt-get update \
     libyaml-tiny-perl \
     libfile-homedir-perl \
     libunicode-linebreak-perl \
+    latexdiff \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
