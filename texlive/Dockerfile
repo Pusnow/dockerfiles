@@ -14,15 +14,17 @@ RUN apt-get update \
     libyaml-tiny-perl \
     libfile-homedir-perl \
     libunicode-linebreak-perl \
-    latexdiff \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
+
+RUN tlmgr update --all --self
 
 RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config && \
     echo "AuthorizedKeysFile     /ssh/authorized_keys" >> /etc/ssh/sshd_config && \
     echo "HostKey /ssh/host_key" >> /etc/ssh/sshd_config
 
 COPY entrypoint.sh /entrypoint.sh
+RUN for d in /usr/local/texlive/*/bin/x86_64-linux; do echo "export PATH=\"${d}:\${PATH}\"" >> /etc/profile; done
 
 EXPOSE 22
 VOLUME [ "/root", "/ssh"]
