@@ -3,6 +3,7 @@ services:
   texlive:
     restart: unless-stopped
     image: ghcr.io/pusnow/texlive:latest
+    hostname: latex
     volumes:
         - data:/root
         - ssh:/ssh
