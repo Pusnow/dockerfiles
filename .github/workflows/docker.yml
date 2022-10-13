@@ -129,3 +129,10 @@ jobs:
       # - uses: azure/container-scan@v0
       #   with:
       #     image-name: ${{ env.CR_PATH }}/${{ matrix.image }}:latest
+  keepalive:
+    needs: [custom, debian]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: gautamkrishnar/keepalive-workflow@v1
+    
