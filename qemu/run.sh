@@ -29,6 +29,11 @@ elif [ -f "${QEMU_DISK}" ] && [ -n "${QEMU_SNAPSHOT_IF_EXIST}" ]; then
     QEMU_SNAPSHOT_ARG="-snapshot"
 fi
 
+QEMU_DO_RESTART=""
+if [ -n "${QEMU_SNAPSHOT_ARG}" ] && [ -n "${QEMU_SNAPSHOT_RESTART}" ]; then
+    QEMU_DO_RESTART="1"
+fi
+
 if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     if [ -n "${QEMU_DISK_URL}" ]; then
         if [[ "${QEMU_DISK_URL}" = *.qcow2.xz ]]; then
@@ -127,41 +132,50 @@ if [ -n "${QEMU_TPM}" ]; then
 fi
 
 term_handler() {
+    QEMU_DO_RESTART=""
     stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | socat UNIX-CONNECT:/var/run/qmp.sock -
 }
 trap 'term_handler' TERM
 
-# shellcheck disable=SC2086
-qemu-system-x86_64 \
-    -pidfile /var/run/qemu.pid \
-    -qmp unix:/var/run/qmp.sock,server,nowait \
-    -machine q35,accel=kvm \
-    -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
-    -m "${QEMU_MEMORY}" \
-    ${QEMU_VNC_ARG} \
-    ${QEMU_VGA_ARGS} \
-    ${QEMU_UEFI_ARG} \
-    ${QEMU_RTC_ARG} \
-    ${QEMU_TPM_ARG} \
-    -device virtio-tablet-pci \
-    -device virtio-keyboard-pci \
-    -device virtio-balloon-pci \
-    -device virtio-rng-pci \
-    ${QEMU_CONSOLE_ARG} \
-    ${QEMU_NET_ARGS} \
-    ${QEMU_SNAPSHOT_ARG} \
-    ${QEMU_DISK_ARG} \
-    ${QEMU_ISO_ARG} \
-    ${QEMU_CLOUD_INIT_ARG} \
-    ${QEMU_EXTRA_ARGS} &
+exec_qemu() {
+    # shellcheck disable=SC2086
+    qemu-system-x86_64 \
+        -pidfile /var/run/qemu.pid \
+        -qmp unix:/var/run/qmp.sock,server,nowait \
+        -machine q35,accel=kvm \
+        -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
+        -m "${QEMU_MEMORY}" \
+        ${QEMU_VNC_ARG} \
+        ${QEMU_VGA_ARGS} \
+        ${QEMU_UEFI_ARG} \
+        ${QEMU_RTC_ARG} \
+        ${QEMU_TPM_ARG} \
+        -device virtio-tablet-pci \
+        -device virtio-keyboard-pci \
+        -device virtio-balloon-pci \
+        -device virtio-rng-pci \
+        ${QEMU_CONSOLE_ARG} \
+        ${QEMU_NET_ARGS} \
+        ${QEMU_SNAPSHOT_ARG} \
+        ${QEMU_DISK_ARG} \
+        ${QEMU_ISO_ARG} \
+        ${QEMU_CLOUD_INIT_ARG} \
+        ${QEMU_EXTRA_ARGS} &
 
-while [ ! -f /var/run/qemu.pid ]; do
-    sleep 1
-done
+    while [ ! -f /var/run/qemu.pid ]; do
+        sleep 1
+    done
 
-QEMU_PID="$(cat /var/run/qemu.pid)"
+    QEMU_PID="$(cat /var/run/qemu.pid)"
 
-while [ -f /var/run/qemu.pid ]; do
-    wait "${QEMU_PID}"
-    echo "Waiting QEMU shutdown..."
+    while [ -f /var/run/qemu.pid ]; do
+        wait "${QEMU_PID}"
+        echo "Waiting QEMU shutdown..."
+    done
+}
+
+exec_qemu
+
+while [ -n "${QEMU_DO_RESTART}" ]; do
+    exec_qemu
 done
