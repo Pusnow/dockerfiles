@@ -111,10 +111,8 @@ fi
 
 QEMU_CONSOLE_ARG=""
 if [ -n "${QEMU_CONSOLE}" ]; then
-    touch /var/run/console.log
-    tail -f /var/run/console.log | ansi2txt &
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -device virtio-serial-pci"
-    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -chardev socket,path=/var/run/console.sock,server=on,wait=off,logfile=/var/run/console.log,id=console0"
+    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -chardev socket,path=/var/run/console.sock,server=on,wait=off,logfile=/dev/stdout,id=console0"
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -serial chardev:console0"
 fi
 
@@ -160,7 +158,8 @@ exec_qemu() {
         ${QEMU_DISK_ARG} \
         ${QEMU_ISO_ARG} \
         ${QEMU_CLOUD_INIT_ARG} \
-        ${QEMU_EXTRA_ARGS} &
+        ${QEMU_EXTRA_ARGS} |
+        ansi2txt &
 
     while [ ! -f /var/run/qemu.pid ]; do
         sleep 1
