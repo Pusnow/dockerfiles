@@ -11,8 +11,6 @@ RUN apt-get update \
     wget \
     curl \
     git \
-    && apt install --no-install-recommends -y \
-    qemu-system-x86 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
