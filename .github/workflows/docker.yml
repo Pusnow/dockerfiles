@@ -100,7 +100,7 @@ jobs:
           - qemu
           - hugo
           - code-server
-          - dev
+          - ssh
           - actions-runner
           - stress-ng
     steps:

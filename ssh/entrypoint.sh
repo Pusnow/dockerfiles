@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ -n "$SSH_KEY" ]; then
+if [ -n "${SSH_KEY}" ]; then
     mkdir -p /root/.ssh
     wget --no-cache --no-cookies -o /dev/null -O /root/.ssh/authorized_keys "$SSH_KEY" 2>&1
 
