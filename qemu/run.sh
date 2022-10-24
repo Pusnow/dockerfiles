@@ -137,7 +137,8 @@ trap 'term_handler' TERM
 
 exec_qemu() {
     # shellcheck disable=SC2086
-    qemu-system-x86_64 \
+    stdbuf -i0 -o0 -e0 \
+        qemu-system-x86_64 \
         -pidfile /var/run/qemu.pid \
         -qmp unix:/var/run/qmp.sock,server,nowait \
         -machine q35,accel=kvm \
