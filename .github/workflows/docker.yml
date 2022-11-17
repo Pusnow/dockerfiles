@@ -98,11 +98,7 @@ jobs:
         image:
           - texlive
           - qemu
-          - hugo
-          - code-server
           - ssh
-          - actions-runner
-          - stress-ng
     steps:
       - name: Install packages
         run: |
