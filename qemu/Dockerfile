@@ -1,4 +1,5 @@
-FROM ghcr.io/pusnow/debian-base:bullseye
+ARG PS_DEBIAN_TAG="bullseye"
+FROM ghcr.io/pusnow/debian-base:${PS_DEBIAN_TAG}
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 

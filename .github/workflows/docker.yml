@@ -10,15 +10,12 @@ env:
   ARCHS: "amd64 arm64"
   CR_PATH: ghcr.io/pusnow
   DH_PATH: docker.io/pusnow
+  DEBIAN_TAG: bullseye
+
 
 jobs:
   base:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        tag:
-          - bullseye
-          #- bookworm
     steps:
       - name: Install packages
         run: |
@@ -33,7 +30,7 @@ jobs:
       - name: Build base images
         run: |
           for ARCH in $ARCHS; do
-            buildah bud --build-arg DEBIAN_TAG=${{ matrix.tag }} --tag debian-base:${{ matrix.tag }} --manifest debian-base-manifest --arch "$ARCH" debian-base
+            buildah bud --build-arg DEBIAN_TAG=${{ env.DEBIAN_TAG }} --tag debian-base:${{ env.DEBIAN_TAG }} --manifest debian-base-manifest --arch "$ARCH" debian-base
           done
 
       - name: Log into GitHub Container Registry
@@ -41,11 +38,11 @@ jobs:
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag debian-base:${{ matrix.tag }} ${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}
-          buildah manifest push --all debian-base-manifest "docker://${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}"
+          buildah tag debian-base:${{ env.DEBIAN_TAG }} ${{ env.CR_PATH }}/debian-base:${{ env.DEBIAN_TAG }}
+          buildah manifest push --all debian-base-manifest "docker://${{ env.CR_PATH }}/debian-base:${{ env.DEBIAN_TAG }}"
       # - uses: azure/container-scan@v0
       #   with:
-      #     image-name: ${{ env.CR_PATH }}/debian-base:${{ matrix.tag }}
+      #     image-name: ${{ env.CR_PATH }}/debian-base:${{ env.DEBIAN_TAG }}
   debian:
     needs: base
     runs-on: ubuntu-latest
@@ -76,7 +73,7 @@ jobs:
       - name: Build images
         run: |
           for ARCH in $ARCHS; do
-            buildah bud --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}" --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" debian-img
+            buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}" --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" debian-img
           done
 
       - name: Log into GitHub Container Registry
@@ -111,7 +108,7 @@ jobs:
       - name: Build images
         run: |
           for ARCH in $ARCHS; do
-            buildah bud  --tag ${{ matrix.image }}:latest --manifest ${{ matrix.image }}-manifest --arch "$ARCH" ${{ matrix.image }}
+            buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --tag ${{ matrix.image }}:latest --manifest ${{ matrix.image }}-manifest --arch "$ARCH" ${{ matrix.image }}
           done
 
       - name: Log into GitHub Container Registry
