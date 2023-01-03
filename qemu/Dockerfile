@@ -15,8 +15,8 @@ RUN apt-get update \
     xz-utils \
     cloud-utils \
     ovmf \
-    qemu-utils/${PS_DEBIAN_TAG}-backports \
-    qemu-system-x86/${PS_DEBIAN_TAG}-backports \
+    qemu-utils \
+    qemu-system-x86 \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
