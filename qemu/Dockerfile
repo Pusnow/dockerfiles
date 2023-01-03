@@ -14,6 +14,7 @@ RUN apt-get update \
     xz-utils \
     cloud-utils \
     ovmf \
+    && apt-get install -t ${PS_DEBIAN_TAG}-backports -y --no-install-recommends \
     qemu-utils \
     qemu-system-x86\
     && rm -rf /var/lib/apt/lists/* \
