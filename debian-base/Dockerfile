@@ -1,5 +1,5 @@
 ARG DEBIAN_TAG="stable"
-FROM debian:${DEBIAN_TAG}-slim
+FROM debian:${DEBIAN_TAG}-backports
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
