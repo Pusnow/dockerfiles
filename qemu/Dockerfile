@@ -1,5 +1,6 @@
 ARG PS_DEBIAN_TAG="bullseye"
 FROM ghcr.io/pusnow/debian-base:${PS_DEBIAN_TAG}
+ARG PS_DEBIAN_TAG
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 
@@ -14,9 +15,8 @@ RUN apt-get update \
     xz-utils \
     cloud-utils \
     ovmf \
-    && apt-get install -t ${PS_DEBIAN_TAG}-backports -y --no-install-recommends \
-    qemu-utils \
-    qemu-system-x86\
+    qemu-utils/${PS_DEBIAN_TAG}-backports \
+    qemu-system-x86/${PS_DEBIAN_TAG}-backports \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
