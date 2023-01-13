@@ -25,8 +25,8 @@ if [ "${UID}" = "$(id -u)" ]; then
 else
     useradd -u "${UID}" -g "${GID}" -l leaf
     if [ -f "/entrypoint.sh" ]; then
-        exec sudo -u leaf /entrypoint.sh $@
+        exec sudo -E -u leaf /entrypoint.sh $@
     else
-        exec sudo -u leaf $@
+        exec sudo -E -u leaf $@
     fi
 fi
