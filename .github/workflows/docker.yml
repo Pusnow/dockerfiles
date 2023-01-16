@@ -96,6 +96,7 @@ jobs:
           - texlive
           - qemu
           - ssh
+          - wsman
     steps:
       - name: Install packages
         run: |
