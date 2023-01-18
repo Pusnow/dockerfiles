@@ -11,7 +11,9 @@ if [ -d "/init.d/" ]; then
     done
 fi
 
-groupadd -g "${GID}" -f leaf
+if [ ! $(getent group "${GID}") ]; then
+    groupadd -g "${GID}" -f leaf
+fi
 
 if [ "${UID}" = "$(id -u)" ]; then
     usermod -g "${GID}" "$(whoami)"
@@ -23,10 +25,12 @@ if [ "${UID}" = "$(id -u)" ]; then
     fi
 
 else
-    useradd -u "${UID}" -g "${GID}" -l leaf
+    if [ ! $(getent passwd "${UID}") ]; then
+        useradd -u "${UID}" -g "${GID}" -l leaf
+    fi
     if [ -f "/entrypoint.sh" ]; then
-        exec sudo -E -u leaf /entrypoint.sh $@
+        exec sudo -E -u "#${UID}" /entrypoint.sh $@
     else
-        exec sudo -E -u leaf $@
+        exec sudo -E -u "#${UID}" $@
     fi
 fi
