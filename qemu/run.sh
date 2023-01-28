@@ -133,9 +133,16 @@ if [ -n "${QEMU_TPM}" ]; then
     QEMU_TPM_ARG="${QEMU_TPM_ARG} -device tpm-tis,tpmdev=tpm0"
 fi
 
+QEMU_PID=""
+
 term_handler() {
     QEMU_DO_RESTART=""
     stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | socat UNIX-CONNECT:/var/run/qmp.sock -
+    
+    if [ -n "${QEMU_PID}" ]; then
+        wait "${QEMU_PID}"
+    fi
+
 }
 trap 'term_handler' TERM
 
