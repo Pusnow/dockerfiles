@@ -53,6 +53,7 @@ ENV QEMU_UEFI_SECURE=""
 ENV QEMU_TPM=""
 ENV QEMU_CONSOLE=""
 ENV QEMU_CLOUD_INIT=""
+ENV QEMU_INPUT="tablet"
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]

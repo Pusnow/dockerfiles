@@ -160,7 +160,7 @@ exec_qemu() {
         ${QEMU_UEFI_ARG} \
         ${QEMU_RTC_ARG} \
         ${QEMU_TPM_ARG} \
-        -device virtio-tablet-pci \
+        -device "virtio-${QEMU_INPUT}-pci" \
         -device virtio-keyboard-pci \
         -device virtio-balloon-pci \
         -device virtio-rng-pci \
