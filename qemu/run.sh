@@ -96,11 +96,15 @@ else
     QEMU_NET_ARGS="-nic user,model=virtio-net-pci${QEMU_MAC_ARGS}${QEMU_NET_HOSTFWD}"
 fi
 
-QEMU_VNC_ARG=""
+QEMU_VNC_ARG="-display"
 if [ -n "${QEMU_VNC}" ]; then
-    QEMU_VNC_ARG="-display vnc=${QEMU_VNC}"
+    QEMU_VNC_ARG="${QEMU_VNC_ARG} vnc=${QEMU_VNC}"
 else
-    QEMU_VNC_ARG="-display vnc=0.0.0.0:0"
+    QEMU_VNC_ARG="${QEMU_VNC_ARG} vnc=0.0.0.0:0"
+fi
+
+if [ -n "${QEMU_VNC_PW}" ]; then
+    QEMU_VNC_ARG="${QEMU_VNC_ARG},password=on"
 fi
 
 QEMU_CLOUD_INIT_ARG=""
@@ -167,6 +171,11 @@ exec_qemu() {
     done
 
     QEMU_PID="$(cat /var/run/qemu.pid)"
+
+    # Setup VNC password
+    if [ -n "${QEMU_VNC_PW}" ]; then
+        stdbuf -i0 -o0 -e0 echo "{ \"execute\": \"qmp_capabilities\" }{ \"execute\": \"set_password\", \"arguments\": { \"protocol\": \"vnc\", \"password\": \"${QEMU_VNC_PW}\" } }" | socat UNIX-CONNECT:/var/run/qmp.sock -
+    fi
 
     while [ -f /var/run/qemu.pid ]; do
         wait "${QEMU_PID}"
