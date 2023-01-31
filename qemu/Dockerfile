@@ -15,6 +15,7 @@ RUN apt-get update \
     xz-utils \
     cloud-utils \
     ovmf \
+    swtpm \
     qemu-utils \
     qemu-system-x86 \
     && rm -rf /var/lib/apt/lists/* \
