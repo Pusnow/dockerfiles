@@ -118,7 +118,7 @@ jobs:
             buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" ${{ matrix.image.name }}
           done
 
-      - name: Build images (debian)
+      - name: Build images (custom debian)
         if: ${{ matrix.image.debian != '' }}
         run: |
           for ARCH in $ARCHS; do
@@ -129,9 +129,16 @@ jobs:
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
 
       - name: Push image to GitHub Container Registry
+        if: ${{ matrix.image.debian == '' }}
         run: |
           buildah tag ${{ matrix.image.name }}:latest ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
           buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:latest"
+
+      - name: Push image to GitHub Container Registry (custom debian)
+        if: ${{ matrix.image.debian != '' }}
+        run: |
+          buildah tag ${{ matrix.image.name }}:${{ matrix.image.debian }} ${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}
+          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}"
 
       # - uses: azure/container-scan@v0
       #   with:
