@@ -7,7 +7,7 @@ on:
   schedule:
     - cron: "0 0 * * 0"
 env:
-  ARCHS: "amd64 arm64"
+  ARCHS: "amd64"
   CR_PATH: ghcr.io/pusnow
   DH_PATH: docker.io/pusnow
   DEBIAN_TAG: bullseye
