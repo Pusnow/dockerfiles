@@ -107,6 +107,13 @@ if [ -n "${QEMU_VNC_PW}" ]; then
     QEMU_VNC_ARG="${QEMU_VNC_ARG},password=on"
 fi
 
+QEMU_AUDIO_ARG=""
+if [ -n "${QEMU_AUDIO}" ]; then
+    QEMU_AUDIO_ARG="${QEMU_AUDIO_ARG} -audiodev none,id=audiodev"
+    QEMU_AUDIO_ARG="${QEMU_AUDIO_ARG} -device ich9-intel-hda,audiodev=audiodev"
+    QEMU_VNC_ARG="${QEMU_VNC_ARG},audiodev=audiodev"
+fi
+
 QEMU_CLOUD_INIT_ARG=""
 if [ -n "${QEMU_CLOUD_INIT}" ] && [ -f "${QEMU_CLOUD_INIT}" ]; then
     cloud-localds /var/run/seed.img "${QEMU_CLOUD_INIT}"
@@ -145,7 +152,7 @@ QEMU_PID=""
 term_handler() {
     QEMU_DO_RESTART=""
     stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | socat UNIX-CONNECT:/var/run/qmp.sock -
-    
+
     if [ -n "${QEMU_PID}" ]; then
         wait "${QEMU_PID}"
     fi
@@ -163,6 +170,7 @@ exec_qemu() {
         -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
         -m "${QEMU_MEMORY}" \
         ${QEMU_VNC_ARG} \
+        ${QEMU_AUDIO_ARG} \
         ${QEMU_VGA_ARGS} \
         ${QEMU_UEFI_ARG} \
         ${QEMU_RTC_ARG} \
