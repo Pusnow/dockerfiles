@@ -123,8 +123,8 @@ if [ -n "${QEMU_CONSOLE}" ]; then
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -serial chardev:console0"
 fi
 if [ -n "${QEMU_CLIPBOARD}" ]; then
-    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -chardev spicevmc,id=clipboard0,name=vdagent"
-    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -device virtserialport,chardev=clipboard0,id=clipboard0,name=com.redhat.spice.0t"
+    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -chardev qemu-vdagent,id=clipboard0,name=vdagent,clipboard=on"
+    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -device virtserialport,chardev=clipboard0,id=clipboard0,name=com.redhat.spice.0"
 fi
 
 QEMU_TPM_ARG=""
