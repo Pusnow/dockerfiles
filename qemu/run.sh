@@ -114,10 +114,17 @@ if [ -n "${QEMU_CLOUD_INIT}" ] && [ -f "${QEMU_CLOUD_INIT}" ]; then
 fi
 
 QEMU_CONSOLE_ARG=""
-if [ -n "${QEMU_CONSOLE}" ]; then
+QEMU_CLIPBOARD_ARG=""
+if [ -n "${QEMU_CONSOLE}" ] || [ -n "${QEMU_CLIPBOARD}" ]; then
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -device virtio-serial-pci"
+fi
+if [ -n "${QEMU_CONSOLE}" ]; then
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -chardev socket,path=/var/run/console.sock,server=on,wait=off,logfile=/dev/stdout,id=console0"
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -serial chardev:console0"
+fi
+if [ -n "${QEMU_CLIPBOARD}" ]; then
+    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -chardev spicevmc,id=clipboard0,name=vdagent"
+    QEMU_CLIPBOARD_ARG="${QEMU_CLIPBOARD_ARG} -device virtserialport,chardev=clipboard0,id=clipboard0,name=com.redhat.spice.0t"
 fi
 
 QEMU_TPM_ARG=""
@@ -165,6 +172,7 @@ exec_qemu() {
         -device virtio-balloon-pci \
         -device virtio-rng-pci \
         ${QEMU_CONSOLE_ARG} \
+        ${QEMU_CLIPBOARD_ARG} \
         ${QEMU_NET_ARGS} \
         ${QEMU_SNAPSHOT_ARG} \
         ${QEMU_DISK_ARG} \
