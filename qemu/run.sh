@@ -110,7 +110,7 @@ fi
 QEMU_AUDIO_ARG=""
 if [ -n "${QEMU_AUDIO}" ]; then
     QEMU_AUDIO_ARG="${QEMU_AUDIO_ARG} -audiodev none,id=audiodev"
-    QEMU_AUDIO_ARG="${QEMU_AUDIO_ARG} -device ich9-intel-hda,audiodev=audiodev"
+    QEMU_AUDIO_ARG="${QEMU_AUDIO_ARG} -device hda-duplex,audiodev=audiodev -device ich9-intel-hda"
     QEMU_VNC_ARG="${QEMU_VNC_ARG},audiodev=audiodev"
 fi
 
