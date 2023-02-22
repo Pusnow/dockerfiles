@@ -23,7 +23,7 @@ jobs:
       name: debian-base
       tag: ${{ matrix.debian-tag }}
       path: debian-base
-      crpath: ${{ env.CR_PATH }}
+      crpath: ghcr.io/pusnow
       buildargs: --buildarg DEBIAN_TAG=${{ matrix.debian-tag }}
 
   debian:
