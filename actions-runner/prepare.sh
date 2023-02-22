@@ -1,20 +1,29 @@
 #!/bin/bash
 set -ex
 
+sudo apt update && sudo apt install -y qemu-utils cloud-guest-utils
 
-docker pull ghcr.io/pusnow/qemu:latest
-docker pull busybox:latest
+wget -O main.qcow2 https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
 
-docker run --rm -v ${PWD}/qcow2:/disks busybox:latest rm -f /disks/main.qcow2 
+qemu-img resize main.qcow2 64G
 
-docker run --rm \
-    --device /dev/kvm \
-    -v ${PWD}/gh-runner.yaml:/gh-runner.yaml:ro \
-    -v ${PWD}/qcow2:/disks \
-    -e QEMU_DISK_URL=https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2 \
-    -e QEMU_DISK_INITIALIZE=64G \
-    -e QEMU_SMP=2 \
-    -e QEMU_CONSOLE=Y \
-    -e QEMU_MEMORY=16G \
-    -e QEMU_CLOUD_INIT=/gh-runner.yaml \
-    ghcr.io/pusnow/qemu:latest
+sudo modprobe nbd max_part=8
+sudo qemu-nbd -c /dev/nbd0 main.qcow2 -f qcow2
+sudo growpart /dev/nbd0 1
+
+sudo mkdir -p /mnt/main
+sudo mount /dev/nbd0p1 /mnt/main
+
+sudo rm -f /mnt/main/etc/resolv.conf 
+sudo cp /etc/resolv.conf /mnt/main/etc/resolv.conf
+sudo cp install.sh /mnt/main/install.sh
+sudo chroot /mnt/main /install.sh
+sudo rm /mnt/main/install.sh
+sudo mkdir -p /mnt/main/var/lib/cloud/scripts/per-boot/
+sudo cp actions-runner.sh /mnt/main/var/lib/cloud/scripts/per-boot/00-actions-runner.sh
+sudo rm -f /mnt/main/etc/resolv.conf 
+
+
+sudo umount /mnt/main
+sudo qemu-nbd -d /dev/nbd0
+sudo rmmmod nbd
