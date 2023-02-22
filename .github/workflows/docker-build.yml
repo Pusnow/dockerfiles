@@ -15,7 +15,11 @@ on:
         type: string
       buildargs:
         type: string
-    secrets: inherit
+    secrets:
+      CR_NAME:
+        required: true
+      CR_TOKEN:
+        required: true
 jobs:
   docker-build:
     runs-on: ubuntu-latest

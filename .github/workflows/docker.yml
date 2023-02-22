@@ -25,6 +25,7 @@ jobs:
       path: debian-base
       crpath: ghcr.io/pusnow
       buildargs: --buildarg DEBIAN_TAG=${{ matrix.debian-tag }}
+    secrets: inherit
 
   debian:
     needs: base
