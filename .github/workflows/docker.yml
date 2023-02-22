@@ -41,7 +41,7 @@ jobs:
             cmd: /usr/sbin/vsftpd
     uses: ./.github/workflows/docker-build.yml
     with:
-      name: ${{ matrix.name }}
+      name: ${{ matrix.image.name }}
       path: debian-image
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=bullseye --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
@@ -58,8 +58,8 @@ jobs:
 
     uses: ./.github/workflows/docker-build.yml
     with:
-      name: ${{ matrix.name }}
-      path: ${{ matrix.name }}
+      name: ${{ matrix.image.name }}
+      path: ${{ matrix.image.name }}
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=bullseye
     secrets: inherit
