@@ -82,18 +82,18 @@ jobs:
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.image.debian-tag }}
     secrets: inherit
 
-  actions-runner:
-    needs: qemu
-    uses: ./.github/workflows/docker-build.yml
-    with:
-      name: actions-runner
-      path: actions-runner
-      crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=bullseye
-    secrets: inherit
+  # actions-runner:
+  #   needs: qemu
+  #   uses: ./.github/workflows/docker-build.yml
+  #   with:
+  #     name: actions-runner
+  #     path: actions-runner
+  #     crpath: ghcr.io/pusnow
+  #     buildargs: --build-arg PS_DEBIAN_TAG=bullseye
+  #   secrets: inherit
 
   keepalive:
-    needs: [custom, debian, qemu, actions-runner]
+    needs: [custom, debian, qemu]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
