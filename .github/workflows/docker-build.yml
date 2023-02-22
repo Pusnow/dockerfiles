@@ -32,19 +32,19 @@ jobs:
 
       - name: Declare manifest
         run: |
-          buildah manifest create ${{input.name}}-${{input.tag}}-manifest
+          buildah manifest create ${{inputs.name}}-${{inputs.tag}}-manifest
 
       - name: Build base images
         run: |
-          buildah bud ${{input.buildargs}} --tag ${{input.name}}:${{input.tag}} --manifest ${{input.name}}-${{input.tag}}-manifest --arch amd64 ${{input.path}}
+          buildah bud ${{inputs.buildargs}} --tag ${{inputs.name}}:${{inputs.tag}} --manifest ${{inputs.name}}-${{inputs.tag}}-manifest --arch amd64 ${{inputs.path}}
 
       - name: Log into GitHub Container Registry
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
 
       - name: Push image to GitHub Container Registry
         run: |
-          buildah tag ${{input.name}}:${{input.tag}} ${{ input.crpath }}/${{input.name}}:${{input.tag}}
-          buildah manifest push --all ${{input.name}}-${{input.tag}}-manifest "docker://${{ input.crpath }}/${{input.name}}:${{input.tag}}"
+          buildah tag ${{inputs.name}}:${{inputs.tag}} ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}
+          buildah manifest push --all ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}"
       # - uses: azure/container-scan@v0
       #   with:
-      #     image-name: ${{ input.crpath }}/${{input.name}}:${{input.tag}}
+      #     image-name: ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}
