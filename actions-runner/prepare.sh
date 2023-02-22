@@ -14,14 +14,15 @@ sudo growpart /dev/nbd0 1
 sudo mkdir -p /mnt/main
 sudo mount /dev/nbd0p1 /mnt/main
 
-sudo rm -f /mnt/main/etc/resolv.conf 
-sudo cp /etc/resolv.conf /mnt/main/etc/resolv.conf
+sudo rm -f /mnt/main/run/resolvconf/resolv.conf
+sudo mkdir -p /mnt/main/run/resolvconf/
+sudo cp /etc/resolv.conf /mnt/main/run/resolvconf/resolv.conf
 sudo cp install.sh /mnt/main/install.sh
 sudo chroot /mnt/main /install.sh
 sudo rm /mnt/main/install.sh
 sudo mkdir -p /mnt/main/var/lib/cloud/scripts/per-boot/
 sudo cp actions-runner.sh /mnt/main/var/lib/cloud/scripts/per-boot/00-actions-runner.sh
-sudo rm -f /mnt/main/etc/resolv.conf 
+sudo rm -f /mnt/main/run/resolvconf/resolv.conf
 
 
 sudo umount /mnt/main
