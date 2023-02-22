@@ -29,7 +29,6 @@ jobs:
 
   debian:
     needs: base
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         image:
@@ -45,85 +44,73 @@ jobs:
           - name: vsftpd
             packages: vsftpd
             cmd: /usr/sbin/vsftpd
-    steps:
-      - name: Install packages
-        run: |
-          sudo apt update && sudo apt install -y crun qemu-user-static
-      - uses: actions/checkout@v2
-      - name: Declare manifest
-        run: |
-          buildah manifest create ${{ matrix.image.name }}-manifest
-
-      - name: Build images
-        run: |
-          for ARCH in $ARCHS; do
-            buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}" --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" debian-img
-          done
-
-      - name: Log into GitHub Container Registry
-        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
-
-      - name: Push image to GitHub Container Registry
-        run: |
-          buildah tag ${{ matrix.image.name }}:latest ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
-          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:latest"
-      # - uses: azure/container-scan@v0
-      #   with:
-      #     image-name: ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: ${{ matrix.name }}
+      path: debian-image
+      crpath: ghcr.io/pusnow
+      buildargs: --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
+    secrets: inherit
 
   custom:
     needs: base
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         image:
           - name: texlive
-          - name: qemu
-          - name: qemu
-            debian: bookworm
           - name: ssh
           - name: wsman
-    steps:
-      - name: Install packages
-        run: |
-          sudo apt update && sudo apt install -y crun qemu-user-static
-      - uses: actions/checkout@v2
-      - name: Declare manifest
-        run: |
-          buildah manifest create ${{ matrix.image.name }}-manifest
 
-      - name: Build images
-        if: ${{ matrix.image.debian == '' }}
-        run: |
-          for ARCH in $ARCHS; do
-            buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" ${{ matrix.image.name }}
-          done
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: ${{ matrix.name }}
+      path: ${{ matrix.name }}
+      crpath: ghcr.io/pusnow
+      buildargs: --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
+    secrets: inherit
 
-      - name: Build images (custom debian)
-        if: ${{ matrix.image.debian != '' }}
-        run: |
-          for ARCH in $ARCHS; do
-            buildah bud --build-arg PS_DEBIAN_TAG=${{ matrix.image.debian }} --tag ${{ matrix.image.name }}:${{ matrix.image.debian }} --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" ${{ matrix.image.name }}
-          done
 
-      - name: Log into GitHub Container Registry
-        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
+    # steps:
+    #   - name: Install packages
+    #     run: |
+    #       sudo apt update && sudo apt install -y crun qemu-user-static
+    #   - uses: actions/checkout@v2
+    #   - name: Declare manifest
+    #     run: |
+    #       buildah manifest create ${{ matrix.image.name }}-manifest
 
-      - name: Push image to GitHub Container Registry
-        if: ${{ matrix.image.debian == '' }}
-        run: |
-          buildah tag ${{ matrix.image.name }}:latest ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
-          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:latest"
+    #   - name: Build images
+    #     if: ${{ matrix.image.debian == '' }}
+    #     run: |
+    #       for ARCH in $ARCHS; do
+    #         buildah bud --build-arg PS_DEBIAN_TAG=${{ env.DEBIAN_TAG }} --tag ${{ matrix.image.name }}:latest --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" ${{ matrix.image.name }}
+    #       done
 
-      - name: Push image to GitHub Container Registry (custom debian)
-        if: ${{ matrix.image.debian != '' }}
-        run: |
-          buildah tag ${{ matrix.image.name }}:${{ matrix.image.debian }} ${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}
-          buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}"
+    #   - name: Build images (custom debian)
+    #     if: ${{ matrix.image.debian != '' }}
+    #     run: |
+    #       for ARCH in $ARCHS; do
+    #         buildah bud --build-arg PS_DEBIAN_TAG=${{ matrix.image.debian }} --tag ${{ matrix.image.name }}:${{ matrix.image.debian }} --manifest ${{ matrix.image.name }}-manifest --arch "$ARCH" ${{ matrix.image.name }}
+    #       done
 
-      # - uses: azure/container-scan@v0
-      #   with:
-      #     image-name: ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
+    #   - name: Log into GitHub Container Registry
+    #     run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
+
+    #   - name: Push image to GitHub Container Registry
+    #     if: ${{ matrix.image.debian == '' }}
+    #     run: |
+    #       buildah tag ${{ matrix.image.name }}:latest ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
+    #       buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:latest"
+
+    #   - name: Push image to GitHub Container Registry (custom debian)
+    #     if: ${{ matrix.image.debian != '' }}
+    #     run: |
+    #       buildah tag ${{ matrix.image.name }}:${{ matrix.image.debian }} ${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}
+    #       buildah manifest push --all ${{ matrix.image.name }}-manifest "docker://${{ env.CR_PATH }}/${{ matrix.image.name }}:${{ matrix.image.debian }}"
+
+    #   # - uses: azure/container-scan@v0
+    #   #   with:
+    #   #     image-name: ${{ env.CR_PATH }}/${{ matrix.image.name }}:latest
   keepalive:
     needs: [custom, debian]
     runs-on: ubuntu-latest
