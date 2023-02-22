@@ -71,7 +71,8 @@ jobs:
         image:
           - tag: bookworm
             debian-tag: bookworm
-          - debian-tag: bullseye
+          - tag: latest
+            debian-tag: bullseye
     uses: ./.github/workflows/docker-build.yml
     with:
       name: qemu
@@ -85,8 +86,8 @@ jobs:
     needs: qemu
     uses: ./.github/workflows/docker-build.yml
     with:
-      name: qemu
-      path: qemu
+      name: actions-runner
+      path: actions-runner
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=bullseye
     secrets: inherit
