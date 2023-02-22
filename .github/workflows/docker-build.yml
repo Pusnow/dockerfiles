@@ -23,6 +23,9 @@ on:
 jobs:
   docker-build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
     steps:
       - name: Install packages
         run: |
@@ -32,13 +35,11 @@ jobs:
 
       - name: Rue prepare script if exist
         run: |
-          if [ -x "${{inputs.path}}/prepare.sh" ];then
-            pushd "${{inputs.path}}"
+          if [ -x prepare.sh ];then
             echo "Running prepare.sh"
             ./prepare.sh
-            popd
           fi
-        shell: bash
+        working-directory: ${{ github.workspace }}/${{inputs.path}}
 
       - name: Declare manifest
         run: |
