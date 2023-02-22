@@ -5,9 +5,9 @@ set -ex
 docker pull ghcr.io/pusnow/qemu:latest
 docker pull busybox:latest
 
-docker run -it --rm -v ${PWD}/qcow2:/disks busybox:latest rm -f /disks/main.qcow2 
+docker run --rm -v ${PWD}/qcow2:/disks busybox:latest rm -f /disks/main.qcow2 
 
-docker run -it --rm \
+docker run --rm \
     --device /dev/kvm \
     -v ${PWD}/gh-runner.yaml:/gh-runner.yaml:ro \
     -v ${PWD}/qcow2:/disks \
