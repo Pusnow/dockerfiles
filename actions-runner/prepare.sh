@@ -26,4 +26,4 @@ sudo rm -f /mnt/main/etc/resolv.conf
 
 sudo umount /mnt/main
 sudo qemu-nbd -d /dev/nbd0
-sudo rmmmod nbd
+sudo rmmod nbd
