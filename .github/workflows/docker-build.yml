@@ -30,6 +30,16 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - name: Rue prepare script if exist
+        run: |
+          if [ -x "${{inputs.path}}/prepare.sh" ];then
+            pushd "${{inputs.path}}"
+            echo "Running prepare.sh"
+            ./prepare.sh
+            popd
+          fi
+        shell: bash
+
       - name: Declare manifest
         run: |
           buildah manifest create ${{inputs.name}}-${{inputs.tag}}-manifest

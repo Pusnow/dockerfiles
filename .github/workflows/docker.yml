@@ -80,8 +80,19 @@ jobs:
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.image.debian-tag }}
     secrets: inherit
+
+  actions-runner:
+    needs: qemu
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: qemu
+      path: qemu
+      crpath: ghcr.io/pusnow
+      buildargs: --build-arg PS_DEBIAN_TAG=bullseye
+    secrets: inherit
+
   keepalive:
-    needs: [custom, debian, qemu]
+    needs: [custom, debian, qemu, actions-runner]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
