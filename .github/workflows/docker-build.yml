@@ -1,0 +1,46 @@
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      tag:
+        required: true
+        type: string
+      path:
+        required: true
+        type: string
+      crpath:
+        required: true
+        type: string
+      buildargs:
+        type: string
+    secrets: inherit
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install packages
+        run: |
+          sudo apt update && sudo apt install -y crun qemu-user-static
+
+      - uses: actions/checkout@v2
+
+      - name: Declare manifest
+        run: |
+          buildah manifest create ${{input.name}}-${{input.tag}}-manifest
+
+      - name: Build base images
+        run: |
+          buildah bud ${{input.buildargs}} --tag ${{input.name}}:${{input.tag}} --manifest ${{input.name}}-${{input.tag}}-manifest --arch amd64 ${{input.path}}
+
+      - name: Log into GitHub Container Registry
+        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          buildah tag ${{input.name}}:${{input.tag}} ${{ input.crpath }}/${{input.name}}:${{input.tag}}
+          buildah manifest push --all ${{input.name}}-${{input.tag}}-manifest "docker://${{ input.crpath }}/${{input.name}}:${{input.tag}}"
+      # - uses: azure/container-scan@v0
+      #   with:
+      #     image-name: ${{ input.crpath }}/${{input.name}}:${{input.tag}}

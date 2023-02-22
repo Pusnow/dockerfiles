@@ -15,37 +15,17 @@ env:
 
 jobs:
   base:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
         debian-tag: ["bullseye", "bookworm"]
-    steps:
-      - name: Install packages
-        run: |
-          sudo apt update && sudo apt install -y crun qemu-user-static
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: debian-base
+      tag: ${{ matrix.debian-tag }}
+      path: debian-base
+      crpath: ${{ env.CR_PATH }}
+      buildargs: --buildarg DEBIAN_TAG=${{ matrix.debian-tag }}
 
-      - uses: actions/checkout@v2
-
-      - name: Declare manifest
-        run: |
-          buildah manifest create debian-base-manifest
-
-      - name: Build base images
-        run: |
-          for ARCH in $ARCHS; do
-            buildah bud --build-arg DEBIAN_TAG=${{ matrix.debian-tag }} --tag debian-base:${{ matrix.debian-tag }} --manifest debian-base-manifest --arch "$ARCH" debian-base
-          done
-
-      - name: Log into GitHub Container Registry
-        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
-
-      - name: Push image to GitHub Container Registry
-        run: |
-          buildah tag debian-base:${{ matrix.debian-tag }} ${{ env.CR_PATH }}/debian-base:${{ matrix.debian-tag }}
-          buildah manifest push --all debian-base-manifest "docker://${{ env.CR_PATH }}/debian-base:${{ matrix.debian-tag }}"
-      # - uses: azure/container-scan@v0
-      #   with:
-      #     image-name: ${{ env.CR_PATH }}/debian-base:${{ matrix.debian-tag }}
   debian:
     needs: base
     runs-on: ubuntu-latest
