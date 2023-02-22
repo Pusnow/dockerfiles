@@ -89,7 +89,7 @@ jobs:
       name: actions-runner
       path: actions-runner
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=bullseye
+      buildargs: --build-arg PS_DEBIAN_TAG=latest
     secrets: inherit
 
   keepalive:
