@@ -39,12 +39,14 @@ jobs:
           - name: vsftpd
             packages: vsftpd
             cmd: /usr/sbin/vsftpd
+        debian-tag: ["bullseye", "bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: ${{ matrix.image.name }}
       path: debian-img
+      tag: ${{ matrix.debian-tag }}
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=bullseye --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
+      buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
     secrets: inherit
 
   custom:
@@ -52,9 +54,7 @@ jobs:
     strategy:
       matrix:
         image:
-          - name: texlive
           - name: ssh
-          - name: wsman
 
     uses: ./.github/workflows/docker-build.yml
     with:
