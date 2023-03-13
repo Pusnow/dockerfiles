@@ -11,7 +11,6 @@ apt-get update &&
         python3 \
         python3-pip \
         build-essential \
-        docker.io \
         cmake &&
     rm -rf /var/lib/apt/lists/* &&
     rm -rf /var/cache/apt/
