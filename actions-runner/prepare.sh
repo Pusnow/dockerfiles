@@ -10,7 +10,7 @@ qemu-img resize main.qcow2 64G
 sudo modprobe nbd max_part=8
 sudo qemu-nbd -c /dev/nbd0 main.qcow2 -f qcow2
 sudo growpart /dev/nbd0 1
-sudo e2fsck -f /dev/nbd0p1
+sudo e2fsck -p -f /dev/nbd0p1
 sudo resize2fs /dev/nbd0p1
 
 sudo mkdir -p /mnt/main
