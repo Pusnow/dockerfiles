@@ -91,7 +91,7 @@ jobs:
       path: actions-runner
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=latest
-      maximize: try
+      maximize: true
     secrets: inherit
 
   keepalive:
