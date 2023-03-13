@@ -5,11 +5,13 @@ sudo apt update && sudo apt install -y qemu-utils cloud-guest-utils
 
 wget -O main.qcow2 https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
 
-qemu-img resize main.qcow2 128G
+qemu-img resize main.qcow2 64G
 
 sudo modprobe nbd max_part=8
 sudo qemu-nbd -c /dev/nbd0 main.qcow2 -f qcow2
 sudo growpart /dev/nbd0 1
+sudo e2fsck -f /dev/nbd0p1
+sudo resize2fs /dev/nbd0p1
 
 sudo mkdir -p /mnt/main
 sudo mount /dev/nbd0p1 /mnt/main
