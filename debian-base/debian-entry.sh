@@ -28,9 +28,18 @@ else
     if [ ! $(getent passwd "${UID}") ]; then
         useradd -u "${UID}" -g "${GID}" -l leaf
     fi
-    if [ -f "/entrypoint.sh" ]; then
-        exec sudo -E -u "#${UID}" /entrypoint.sh $@
+    if [ "${SUDO}" = "Y" ] || [ "${SUDO}" = "1" ]; then
+        if [ -f "/entrypoint.sh" ]; then
+            exec sudo -E -u "#${UID}" /entrypoint.sh $@
+        else
+            exec sudo -E -u "#${UID}" $@
+        fi
     else
-        exec sudo -E -u "#${UID}" $@
+        if [ -f "/entrypoint.sh" ]; then
+            exec /entrypoint.sh $@
+        else
+            exec $@
+        fi
+
     fi
 fi
