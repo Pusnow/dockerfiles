@@ -40,6 +40,9 @@ jobs:
           - name: vsftpd
             packages: vsftpd
             cmd: /usr/sbin/vsftpd
+          - name: isync
+            packages: isync
+            cmd: mbsync
         debian-tag: ["bullseye", "bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
