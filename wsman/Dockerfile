@@ -12,4 +12,5 @@ RUN apt-get update \
 COPY run.sh /run.sh
 ENV HOST=""
 ENV PASSWORD=""
+ENV VNC_PASSWORD=""
 ENTRYPOINT [ "/run.sh" ]

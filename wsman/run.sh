@@ -1,13 +1,15 @@
 #!/bin/bash
 set -e
 
-VNC_PASSWORD=$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc A-Z | head -c 1)
-VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc a-z | head -c 1)
-VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc 0-9 | head -c 1)
-VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc @%^ | head -c 1)
-VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc A-Za-z0-9@%^ | head -c 4)
-VNC_PASSWORD=$(echo "$VNC_PASSWORD" | fold -w1 | shuf | tr -d '\n')
-# VNC_PASSWORD="${VNC_PASSWORD}"
+if [ -z "${VNC_PASSWORD} "]
+    VNC_PASSWORD=$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc A-Z | head -c 1)
+    VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc a-z | head -c 1)
+    VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc 0-9 | head -c 1)
+    VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc @%^ | head -c 1)
+    VNC_PASSWORD=$VNC_PASSWORD$(head -c 10000 /dev/urandom | LC_CTYPE=C  tr -dc A-Za-z0-9@%^ | head -c 4)
+    VNC_PASSWORD=$(echo "$VNC_PASSWORD" | fold -w1 | shuf | tr -d '\n')
+fi
+
 echo "VNC_PASSWORD: ${VNC_PASSWORD}"
 
 # Enable VNC Password
