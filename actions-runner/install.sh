@@ -1,7 +1,9 @@
 #!/bin/bash
 set -ex
 export DEBIAN_FRONTEND=noninteractive
-apt-get update &&
+
+apt-mark hold grub-cloud-amd64 &&
+    apt-get update &&
     apt-get upgrade -y &&
     apt-get install -y --no-install-recommends \
         curl \

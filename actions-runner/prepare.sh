@@ -3,7 +3,7 @@ set -ex
 
 sudo apt update && sudo apt install -y qemu-utils cloud-guest-utils
 
-wget -O main.qcow2 https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
+wget -q -O main.qcow2 https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2
 
 qemu-img resize main.qcow2 64G
 
