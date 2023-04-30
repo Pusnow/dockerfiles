@@ -4,7 +4,6 @@ export DEBIAN_FRONTEND=noninteractive
 
 apt-mark hold grub-cloud-amd64 &&
     apt-get update &&
-    apt-get upgrade -y &&
     apt-get install -y --no-install-recommends \
         curl \
         ca-certificates \
