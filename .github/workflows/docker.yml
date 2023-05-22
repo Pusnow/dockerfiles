@@ -43,6 +43,9 @@ jobs:
           - name: isync
             packages: isync
             cmd: /usr/bin/mbsync
+          - name: tinyproxy
+            packages: tinyproxy
+            cmd: /usr/bin/tinyproxy -d
         debian-tag: ["bullseye", "bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
