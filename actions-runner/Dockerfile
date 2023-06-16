@@ -1,6 +1,4 @@
-ARG PS_DEBIAN_TAG="bullseye"
-FROM ghcr.io/pusnow/qemu:${PS_DEBIAN_TAG}
-ARG PS_DEBIAN_TAG
+FROM ghcr.io/pusnow/qemu:bookworm
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
 

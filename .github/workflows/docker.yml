@@ -13,14 +13,14 @@ jobs:
   base:
     strategy:
       matrix:
-        debian-tag: ["bullseye", "bookworm"]
+        debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: debian-base
       tag: ${{ matrix.debian-tag }}
       path: debian-base
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg DEBIAN_TAG=${{ matrix.debian-tag }}
+      buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }}
     secrets: inherit
 
   debian:
@@ -46,7 +46,7 @@ jobs:
           - name: tinyproxy
             packages: tinyproxy
             cmd: /usr/bin/tinyproxy -d
-        debian-tag: ["bullseye", "bookworm"]
+        debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: ${{ matrix.image.name }}
@@ -68,25 +68,15 @@ jobs:
       name: ${{ matrix.image.name }}
       path: ${{ matrix.image.name }}
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=bullseye
     secrets: inherit
 
   qemu:
     needs: base
-    strategy:
-      matrix:
-        image:
-          - tag: bookworm
-            debian-tag: bookworm
-          - tag: latest
-            debian-tag: bullseye
     uses: ./.github/workflows/docker-build.yml
     with:
       name: qemu
       path: qemu
-      tag: ${{ matrix.image.tag }}
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.image.debian-tag }}
     secrets: inherit
 
   actions-runner:
@@ -96,7 +86,6 @@ jobs:
       name: actions-runner
       path: actions-runner
       crpath: ghcr.io/pusnow
-      buildargs: --build-arg PS_DEBIAN_TAG=latest
       maximize: false
     secrets: inherit
 
