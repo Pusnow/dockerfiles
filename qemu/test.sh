@@ -2,8 +2,8 @@
 set -x
 set -e
 
-DEBIAN_NOCLOUD_URL="https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-nocloud-amd64.qcow2"
-DEBIAN_GENERICCLOUD_URL="https://cloud.debian.org/images/cloud/bullseye/latest/debian-11-genericcloud-amd64.qcow2"
+DEBIAN_NOCLOUD_URL="https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-nocloud-amd64.qcow2"
+DEBIAN_GENERICCLOUD_URL="https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-genericcloud-amd64.qcow2"
 FCOS_URL="https://builds.coreos.fedoraproject.org/prod/streams/stable/builds/36.20220723.3.1/x86_64/fedora-coreos-36.20220723.3.1-qemu.x86_64.qcow2.xz"
 
 docker build -t qemu-testing .
