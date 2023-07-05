@@ -1,3 +1,19 @@
+FROM docker.io/rust:bookworm as virtiofsd
+
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get install -y --no-install-recommends \
+    libcap-ng-dev \
+    libseccomp-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/cache/apt/
+
+RUN wget -O /tmp/virtiofsd.tar.gz https://gitlab.com/virtio-fs/virtiofsd/-/archive/v1.6.1/virtiofsd-v1.6.1.tar.gz
+RUN mkdir -p /usr/src/virtiofsd && tar -C /usr/src/virtiofsd --strip-components=1 -xvzf /tmp/virtiofsd.tar.gz 
+WORKDIR /usr/src/virtiofsd
+RUN cargo build --release 
+RUN ls /usr/src/virtiofsd/target/release
+
 FROM ghcr.io/pusnow/debian-base:bookworm
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
@@ -20,6 +36,7 @@ RUN apt-get update \
     && rm -rf /var/cache/apt/
 
 COPY run.sh /
+COPY --from=virtiofsd /usr/src/virtiofsd/target/release/virtiofsd /usr/local/bin/virtiofsd
 
 EXPOSE 5900
 
