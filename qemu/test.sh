@@ -11,13 +11,15 @@ docker build -t qemu-testing .
 docker run -it --rm \
     --name qemu-testing \
     --device /dev/kvm \
-    --volume /tmp/disks:/disks \
-    --volume ${PWD}/example.yaml:/root/example.yaml:ro \
+    --cap-add=NET_ADMIN --device /dev/net/tun:/dev/net/tun \
+    --volume /var/tmp/disks:/disks \
+    --volume ${PWD}/cloudinit:/root/cloudinit:ro \
     -p 5901:5901 \
     -p 2222:22 \
     -e QEMU_VNC="0.0.0.0:1" \
     -e QEMU_DISK_URL="${DEBIAN_GENERICCLOUD_URL}" \
     -e QEMU_CONSOLE="Y" \
-    -e QEMU_CLOUD_INIT="/root/example.yaml" \
+    -e QEMU_CLOUD_INIT="/root/cloudinit" \
     -e QEMU_TCP_PORTS="22" \
+    -e QEMU_TAP_AUTO="1" \
     qemu-testing

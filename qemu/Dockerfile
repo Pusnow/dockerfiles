@@ -26,6 +26,8 @@ RUN apt-get update \
     ca-certificates \
     socat \
     colorized-logs \
+    iproute2 \
+    iptables \
     xz-utils \
     cloud-utils \
     ovmf \
@@ -35,7 +37,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
-COPY run.sh /
 COPY --from=virtiofsd /usr/src/virtiofsd/target/release/virtiofsd /usr/local/bin/virtiofsd
 
 EXPOSE 5900
@@ -72,6 +73,8 @@ ENV QEMU_TPM=""
 ENV QEMU_CONSOLE=""
 ENV QEMU_CLOUD_INIT=""
 ENV QEMU_INPUT="tablet"
+
+COPY run.sh /
 
 VOLUME [ "/disks" ]
 CMD ["/run.sh"]

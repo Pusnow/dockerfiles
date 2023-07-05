@@ -92,6 +92,26 @@ fi
 QEMU_NET_ARGS=""
 if [ -n "${QEMU_TAP}" ]; then
     QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=${QEMU_TAP},model=virtio-net-pci${QEMU_MAC_ARGS}${QEMU_VHOST_ARGS}"
+elif [ -n "${QEMU_TAP_AUTO}" ]; then
+    ip tuntap add tap0 mode tap
+    ip addr add 192.168.10.1/24 dev tap0
+    ip link set dev tap0 up
+    iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+    iptables -A FORWARD -m conntrack --ctstate INVALID -j DROP
+    iptables -A FORWARD -m conntrack --ctstate RELATED,ESTABLISHED -j ACCEPT
+    iptables -A FORWARD -s 192.168.10.0/24 -m conntrack --ctstate NEW -j ACCEPT
+    iptables -A FORWARD -j RETURN
+    iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+
+    for TCP_PORT in ${QEMU_TCP_PORTS//;/ }; do
+        iptables -t nat -I PREROUTING -p tcp --dport ${TCP_PORT} -j DNAT --to-destination 192.168.10.2:${TCP_PORT}
+    done
+
+    for UDP_PORT in ${QEMU_UDP_PORTS//;/ }; do
+        iptables -t nat -I PREROUTING -p udp --dport ${UDP_PORT} -j DNAT --to-destination 192.168.10.2:${UDP_PORT}
+    done
+
+    QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=tap0,model=virtio-net-pci${QEMU_MAC_ARGS}${QEMU_VHOST_ARGS}"
 else
     QEMU_NET_ARGS="-nic user,model=virtio-net-pci${QEMU_MAC_ARGS}${QEMU_NET_HOSTFWD}"
 fi
@@ -115,9 +135,26 @@ if [ -n "${QEMU_AUDIO}" ]; then
 fi
 
 QEMU_CLOUD_INIT_ARG=""
-if [ -n "${QEMU_CLOUD_INIT}" ] && [ -f "${QEMU_CLOUD_INIT}" ]; then
-    cloud-localds /var/run/seed.img "${QEMU_CLOUD_INIT}"
-    QEMU_CLOUD_INIT_ARG="-drive file=/var/run/seed.img,if=virtio,format=raw"
+if [ -n "${QEMU_CLOUD_INIT}" ]; then
+    if [ -f "${QEMU_CLOUD_INIT}" ]; then
+        cloud-localds -v /var/run/seed.img "${QEMU_CLOUD_INIT}"
+        QEMU_CLOUD_INIT_ARG="-drive file=/var/run/seed.img,if=virtio,format=raw"
+    elif [ -d "${QEMU_CLOUD_INIT}" ]; then
+        CLOUD_LOCALDS_NETWORK_ARGS=""
+        CLOUD_LOCALDS_META_ARGS=""
+
+        if [ -f "${QEMU_CLOUD_INIT}/user-data.yaml" ]; then
+            CLOUD_LOCALDS_META_ARGS="${QEMU_CLOUD_INIT}/user-data.yaml"
+        fi
+
+        if [ -f "${QEMU_CLOUD_INIT}/network-config-v2.yaml" ]; then
+            CLOUD_LOCALDS_NETWORK_ARGS="--network-config=${QEMU_CLOUD_INIT}/network-config-v2.yaml"
+        fi
+
+        echo cloud-localds -v ${CLOUD_LOCALDS_NETWORK_ARGS} /var/run/seed.img "${QEMU_CLOUD_INIT}/user-data.yaml" ${CLOUD_LOCALDS_META_ARGS}
+        cloud-localds -v ${CLOUD_LOCALDS_NETWORK_ARGS} /var/run/seed.img "${QEMU_CLOUD_INIT}/user-data.yaml" ${CLOUD_LOCALDS_META_ARGS}
+        QEMU_CLOUD_INIT_ARG="-drive file=/var/run/seed.img,if=virtio,format=raw"
+    fi
 fi
 
 QEMU_CONSOLE_ARG=""
