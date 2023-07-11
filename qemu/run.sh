@@ -103,12 +103,14 @@ elif [ -n "${QEMU_TAP_AUTO}" ]; then
     iptables -A FORWARD -j RETURN
     iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 
+    HOST_IP=$(hostname --ip-address)
+
     for TCP_PORT in ${QEMU_TCP_PORTS//;/ }; do
-        iptables -t nat -I PREROUTING -p tcp --dport ${TCP_PORT} -j DNAT --to-destination 192.168.10.2:${TCP_PORT}
+        iptables -t nat -I PREROUTING -p tcp -d "${HOST_IP}" --dport ${TCP_PORT} -j DNAT --to-destination 192.168.10.2:${TCP_PORT}
     done
 
     for UDP_PORT in ${QEMU_UDP_PORTS//;/ }; do
-        iptables -t nat -I PREROUTING -p udp --dport ${UDP_PORT} -j DNAT --to-destination 192.168.10.2:${UDP_PORT}
+        iptables -t nat -I PREROUTING -p udp -d "${HOST_IP}" --dport ${UDP_PORT} -j DNAT --to-destination 192.168.10.2:${UDP_PORT}
     done
 
     QEMU_NET_ARGS="-nic tap,script=no,downscript=no,ifname=tap0,model=virtio-net-pci${QEMU_MAC_ARGS}${QEMU_VHOST_ARGS}"
