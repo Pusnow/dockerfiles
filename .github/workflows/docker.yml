@@ -46,6 +46,9 @@ jobs:
           - name: tinyproxy
             packages: tinyproxy
             cmd: /usr/bin/tinyproxy -d
+          - name: mptcpd
+            packages: mptcpd mptcpd-plugins
+            cmd: /usr/bin/mptcpd
         debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
