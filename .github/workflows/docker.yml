@@ -49,6 +49,9 @@ jobs:
           - name: mptcpd
             packages: mptcpd mptcpd-plugins
             cmd: /usr/bin/mptcpd
+          - name: samba
+            packages: samba
+            cmd: /usr/sbin/smbd --foreground --no-process-group
         debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
