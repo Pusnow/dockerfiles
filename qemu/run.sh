@@ -208,7 +208,13 @@ QEMU_PID=""
 term_handler() {
     QEMU_DO_RESTART=""
 
-    stdbuf -i0 -o0 -e0 echo 'system_powerdown' | socat UNIX-CONNECT:/var/run/monitor.sock -
+    if [ -n "${QEMU_QGA_HIBERNATE}" ]; then
+        stdbuf -i0 -o0 -e0 echo 'system_wakeup' | socat UNIX-CONNECT:/var/run/monitor.sock -
+        sleep 15
+        stdbuf -i0 -o0 -e0 echo '{"execute": "guest-suspend-disk"}' | socat UNIX-CONNECT:/var/run/qga.sock -
+    else
+        stdbuf -i0 -o0 -e0 echo 'system_powerdown' | socat UNIX-CONNECT:/var/run/monitor.sock -
+    fi
 
     if [ -n "${QEMU_PID}" ]; then
         wait "${QEMU_PID}"
