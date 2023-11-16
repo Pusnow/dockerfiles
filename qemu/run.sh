@@ -207,6 +207,7 @@ QEMU_PID=""
 
 term_handler() {
     QEMU_DO_RESTART=""
+
     stdbuf -i0 -o0 -e0 echo 'system_powerdown' | socat UNIX-CONNECT:/var/run/monitor.sock -
 
     if [ -n "${QEMU_PID}" ]; then
@@ -223,6 +224,7 @@ exec_qemu() {
         qemu-system-x86_64 \
         -pidfile /var/run/qemu.pid \
         -monitor unix:/var/run/monitor.sock,server,nowait \
+        -qmp unix:/var/run/qmp.sock,server,nowait \
         -machine q35,accel=kvm \
         -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
         -m "${QEMU_MEMORY}" \
