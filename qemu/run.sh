@@ -190,7 +190,7 @@ QEMU_PID=""
 
 term_handler() {
     QEMU_DO_RESTART=""
-    stdbuf -i0 -o0 -e0 echo '{ "execute": "qmp_capabilities" }{"execute": "system_powerdown"}' | socat UNIX-CONNECT:/var/run/qmp.sock -
+    stdbuf -i0 -o0 -e0 echo 'system_powerdown' | socat UNIX-CONNECT:/var/run/monitor.sock -
 
     if [ -n "${QEMU_PID}" ]; then
         wait "${QEMU_PID}"
@@ -198,13 +198,14 @@ term_handler() {
 
 }
 trap 'term_handler' TERM
+trap 'term_handler' INT
 
 exec_qemu() {
     # shellcheck disable=SC2086
     stdbuf -i0 -o0 -e0 \
         qemu-system-x86_64 \
         -pidfile /var/run/qemu.pid \
-        -qmp unix:/var/run/qmp.sock,server,nowait \
+        -monitor unix:/var/run/monitor.sock,server,nowait \
         -machine q35,accel=kvm \
         -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
         -m "${QEMU_MEMORY}" \
@@ -236,7 +237,7 @@ exec_qemu() {
 
     # Setup VNC password
     if [ -n "${QEMU_VNC_PW}" ]; then
-        stdbuf -i0 -o0 -e0 echo "{ \"execute\": \"qmp_capabilities\" }{ \"execute\": \"set_password\", \"arguments\": { \"protocol\": \"vnc\", \"password\": \"${QEMU_VNC_PW}\" } }" | socat UNIX-CONNECT:/var/run/qmp.sock -
+        stdbuf -i0 -o0 -e0 echo "change vnc password ${QEMU_VNC_PW}" | socat UNIX-CONNECT:/var/run/monitor.sock -
     fi
 
     while [ -f /var/run/qemu.pid ]; do
