@@ -51,7 +51,7 @@ if [ ! -f "${QEMU_DISK}" ] && [ -n "${QEMU_DISK_INITIALIZE}" ]; then
     qemu-img info "${QEMU_DISK}"
 fi
 
-if [ ! -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2_INITIALIZE}" ]; then
+if [ -n "${QEMU_DISK}" ] && [ ! -f "${QEMU_DISK2}" ] && [ -n "${QEMU_DISK2_INITIALIZE}" ]; then
     qemu-img create -f qcow2 "${QEMU_DISK2}" "${QEMU_DISK2_INITIALIZE}"
     qemu-img info "${QEMU_DISK}"
 fi
