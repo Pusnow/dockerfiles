@@ -179,7 +179,7 @@ fi
 QEMU_CONSOLE_ARG=""
 QEMU_CLIPBOARD_ARG=""
 if [ -n "${QEMU_CONSOLE}" ] || [ -n "${QEMU_CLIPBOARD}" ]; then
-    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -device virtio-serial-pci"
+    QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG}"
 fi
 if [ -n "${QEMU_CONSOLE}" ]; then
     QEMU_CONSOLE_ARG="${QEMU_CONSOLE_ARG} -chardev socket,path=/var/run/console.sock,server=on,wait=off,logfile=/dev/stdout,id=console0"
@@ -225,6 +225,9 @@ exec_qemu() {
         -pidfile /var/run/qemu.pid \
         -monitor unix:/var/run/monitor.sock,server,nowait \
         -qmp unix:/var/run/qmp.sock,server,nowait \
+        -chardev socket,path=/var/run/qga.sock,server=on,wait=off,id=qga0 \
+        -device virtio-serial-pci \
+        -device virtserialport,chardev=qga0,name=org.qemu.guest_agent.0 \
         -machine q35,accel=kvm \
         -cpu "host${QEMU_CPU_OPT}" -smp "${QEMU_SMP},sockets=1,cores=${QEMU_SMP},threads=1" \
         -m "${QEMU_MEMORY}" \
