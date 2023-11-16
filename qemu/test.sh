@@ -16,6 +16,7 @@ sudo podman run -it --rm \
     --volume ${PWD}/cloudinit:/root/cloudinit:ro \
     -p 5901:5901 \
     -p 2222:22 \
+    -e QEMU_DISK2=/disks/swap.qcow2 \
     -e QEMU_VNC="0.0.0.0:1" \
     -e QEMU_DISK_URL="${DEBIAN_GENERICCLOUD_URL}" \
     -e QEMU_CONSOLE="Y" \
