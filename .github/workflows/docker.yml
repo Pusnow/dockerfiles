@@ -52,6 +52,9 @@ jobs:
           - name: samba
             packages: samba
             cmd: /usr/sbin/smbd --foreground --no-process-group
+          - name: curl
+            packages: curl
+            cmd: curl
         debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-build.yml
     with:
