@@ -2,7 +2,7 @@ ARG PS_DEBIAN_TAG
 FROM debian:${PS_DEBIAN_TAG}
 LABEL maintainer="wonsup@pusnow.com"
 LABEL org.opencontainers.image.source https://github.com/Pusnow/dockerfiles
-
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get upgrade -y &&\
     DEBIAN_FRONTEND=noninteractive \
