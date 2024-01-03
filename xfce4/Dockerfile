@@ -21,6 +21,7 @@ RUN apt-get update \
     procps \
     novnc \
     websockify \
+    screen \
     && rm -rf /var/lib/apt/lists/* \
     && rm -rf /var/cache/apt/
 
