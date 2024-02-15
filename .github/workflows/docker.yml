@@ -10,7 +10,7 @@ on:
 
 
 jobs:
-  base:
+  debian-base:
     strategy:
       matrix:
         debian-tag: ["bookworm"]
@@ -23,8 +23,21 @@ jobs:
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }}
     secrets: inherit
 
+  fedora-base:
+    strategy:
+      matrix:
+        fedora-tag: ["39"]
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: fedora-base
+      tag: ${{ matrix.fedora-tag }}
+      path: fedora-base
+      crpath: ghcr.io/pusnow
+      buildargs: --build-arg PS_FEDORA_TAG=${{ matrix.fedora-tag }}
+    secrets: inherit
+
   debian:
-    needs: base
+    needs: debian-base
     strategy:
       matrix:
         image:
@@ -65,8 +78,8 @@ jobs:
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
     secrets: inherit
 
-  custom:
-    needs: base
+  debian-custom:
+    needs: debian-base
     strategy:
       matrix:
         image:
@@ -81,8 +94,8 @@ jobs:
       crpath: ghcr.io/pusnow
     secrets: inherit
 
-  qemu:
-    needs: base
+  debian-qemu:
+    needs: debian-base
     uses: ./.github/workflows/docker-build.yml
     with:
       name: qemu
@@ -91,7 +104,7 @@ jobs:
     secrets: inherit
 
   actions-runner:
-    needs: qemu
+    needs: debian-qemu
     uses: ./.github/workflows/docker-build.yml
     with:
       name: actions-runner
@@ -101,7 +114,7 @@ jobs:
     secrets: inherit
 
   keepalive:
-    needs: [custom, debian, qemu, actions-runner]
+    needs: [debian-custom, debian, debian-qemu, actions-runner]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
