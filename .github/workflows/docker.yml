@@ -94,6 +94,21 @@ jobs:
       crpath: ghcr.io/pusnow
     secrets: inherit
 
+  fedora-custom:
+    needs: fedora-base
+    strategy:
+      matrix:
+        image:
+          - name: dev
+
+    uses: ./.github/workflows/docker-build.yml
+    with:
+      name: ${{ matrix.image.name }}
+      path: ${{ matrix.image.name }}
+      crpath: ghcr.io/pusnow
+    secrets: inherit
+
+
   debian-qemu:
     needs: debian-base
     uses: ./.github/workflows/docker-build.yml
