@@ -8,6 +8,8 @@ RUN dnf -y update && \
     dnf -y install \
     meson \
     pipx \
+    htop \
     && dnf clean all
 
 VOLUME ["/root"]
+WORKDIR "/root"
