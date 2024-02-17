@@ -1,0 +1,48 @@
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: true
+        type: string
+      tag:
+        default: latest
+        type: string
+      archs:
+        default: amd64
+        type: string
+      crpath:
+        required: true
+        type: string
+    secrets:
+      CR_NAME:
+        required: true
+      CR_TOKEN:
+        required: true
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Declare manifest
+        run: |
+          buildah manifest create ${{inputs.name}}-${{inputs.tag}}-manifest
+
+      - name: Add manifest
+        run: |
+          for arch in ${{inputs.archs}}; do
+            buildah manifest add ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}-$arch"
+          done
+
+      - name: Log into GitHub Container Registry
+        run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
+
+      - name: Push image to GitHub Container Registry
+        run: |
+          buildah manifest push --all ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}"
+      # - uses: azure/container-scan@v0
+      #   with:
+      #     image-name: ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}

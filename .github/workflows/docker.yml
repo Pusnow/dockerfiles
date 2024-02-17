@@ -10,7 +10,7 @@ on:
 
 
 jobs:
-  debian-base:
+  debian-base-build:
     strategy:
       matrix:
         debian-tag: ["bookworm"]
@@ -23,6 +23,18 @@ jobs:
       path: debian-base
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }}
+    secrets: inherit
+  debian-base:
+    needs: debian-base-build
+    strategy:
+      matrix:
+        debian-tag: ["bookworm"]
+    uses: ./.github/workflows/docker-manifest.yml
+    with:
+      name: debian-base
+      tag: ${{ matrix.debian-tag }}
+      arch: amd64 arm64
+      crpath: ghcr.io/pusnow
     secrets: inherit
 
   fedora-base:
