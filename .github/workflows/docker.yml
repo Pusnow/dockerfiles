@@ -33,7 +33,7 @@ jobs:
     with:
       name: debian-base
       tag: ${{ matrix.debian-tag }}
-      arch: "amd64 arm64"
+      archs: amd64 arm64
       crpath: ghcr.io/pusnow
     secrets: inherit
 
