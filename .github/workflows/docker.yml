@@ -14,10 +14,12 @@ jobs:
     strategy:
       matrix:
         debian-tag: ["bookworm"]
+        arch: ["amd64", "arm64"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: debian-base
       tag: ${{ matrix.debian-tag }}
+      arch: ${{ matrix.arch }}
       path: debian-base
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }}

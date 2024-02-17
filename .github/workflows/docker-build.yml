@@ -7,6 +7,9 @@ on:
       tag:
         default: latest
         type: string
+      arch:
+        default: amd64
+        type: string
       path:
         required: true
         type: string
@@ -57,7 +60,7 @@ jobs:
 
       - name: Build base images
         run: |
-          buildah bud ${{inputs.buildargs}} --tag ${{inputs.name}}:${{inputs.tag}} --manifest ${{inputs.name}}-${{inputs.tag}}-manifest --arch amd64 ${{inputs.path}}
+          buildah bud ${{inputs.buildargs}} --tag ${{inputs.name}}:${{inputs.tag}} --manifest ${{inputs.name}}-${{inputs.tag}}-manifest --arch ${{inputs.arch}} ${{inputs.path}}
 
       - name: Log into GitHub Container Registry
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
