@@ -44,7 +44,7 @@ jobs:
         run: |
           sudo apt update && sudo apt install -y crun qemu-user-static
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Rue prepare script if exist
         run: |
@@ -60,15 +60,20 @@ jobs:
 
       - name: Build base images
         run: |
-          buildah bud ${{inputs.buildargs}} --tag ${{inputs.name}}:${{inputs.tag}} --manifest ${{inputs.name}}-${{inputs.tag}}-manifest --arch ${{inputs.arch}} ${{inputs.path}}
+          buildah bud ${{inputs.buildargs}} --tag ${{inputs.name}}:${{inputs.tag}}-${{inputs.arch}} --manifest ${{inputs.name}}-${{inputs.tag}}-manifest --arch ${{inputs.arch}} ${{inputs.path}}
 
       - name: Log into GitHub Container Registry
         run: buildah login -u ${{ secrets.CR_NAME }} -p "${{ secrets.CR_TOKEN }}" ghcr.io
 
       - name: Push image to GitHub Container Registry
         run: |
+          buildah tag ${{inputs.name}}:${{inputs.tag}}-${{inputs.arch}} ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}-${{inputs.arch}}
+          buildah manifest push --all ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}-${{inputs.arch}}"
+      - name: Push image to GitHub Container Registry (amd64)
+        run: |
           buildah tag ${{inputs.name}}:${{inputs.tag}} ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}
           buildah manifest push --all ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}"
+        if: inputs.arch == 'amd64'
       # - uses: azure/container-scan@v0
       #   with:
       #     image-name: ${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}
