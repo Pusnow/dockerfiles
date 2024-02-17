@@ -34,7 +34,7 @@ jobs:
       - name: Add manifest
         run: |
           for arch in ${{inputs.archs}}; do
-            buildah manifest add ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}-$arch"
+            buildah manifest add --arch $arch ${{inputs.name}}-${{inputs.tag}}-manifest "docker://${{ inputs.crpath }}/${{inputs.name}}:${{inputs.tag}}-$arch"
           done
 
       - name: Log into GitHub Container Registry
