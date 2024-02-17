@@ -37,20 +37,34 @@ jobs:
       crpath: ghcr.io/pusnow
     secrets: inherit
 
-  fedora-base:
+  fedora-base-build:
     strategy:
       matrix:
         fedora-tag: ["39"]
+        arch: ["amd64", "arm64"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: fedora-base
       tag: ${{ matrix.fedora-tag }}
+      arch: ${{ matrix.arch }}
       path: fedora-base
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_FEDORA_TAG=${{ matrix.fedora-tag }}
     secrets: inherit
+  fedora-base:
+    needs: fedora-base-build
+    strategy:
+      matrix:
+        fedora-tag: ["39"]
+    uses: ./.github/workflows/docker-manifest.yml
+    with:
+      name: fedora-base
+      tag: ${{ matrix.fedora-tag }}
+      archs: amd64 arm64
+      crpath: ghcr.io/pusnow
+    secrets: inherit
 
-  debian:
+  debian-build:
     needs: debian-base
     strategy:
       matrix:
@@ -83,16 +97,41 @@ jobs:
             packages: curl iptables jq
             cmd: curl
         debian-tag: ["bookworm"]
+        arch: ["amd64", "arm64"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: ${{ matrix.image.name }}
       path: debian-img
       tag: ${{ matrix.debian-tag }}
+      arch: ${{ matrix.arch }}
       crpath: ghcr.io/pusnow
       buildargs: --build-arg PS_DEBIAN_TAG=${{ matrix.debian-tag }} --build-arg DEBIAN_PKGS="${{ matrix.image.packages }}" --build-arg DEBIAN_CMD="${{ matrix.image.cmd }}"
     secrets: inherit
 
-  debian-custom:
+  debian:
+    needs: debian-build
+    strategy:
+      matrix:
+        debian-tag: ["bookworm"]
+        image:
+         - borg
+         - dnsmasq
+         - hostapd
+         - vsftpd
+         - isync
+         - tinyproxy
+         - mptcpd
+         - samba
+         - netsetup
+    uses: ./.github/workflows/docker-manifest.yml
+    with:
+      name: ${{ matrix.image }}
+      tag: ${{ matrix.debian-tag }}
+      archs: amd64 arm64
+      crpath: ghcr.io/pusnow
+    secrets: inherit
+
+  debian-custom-build:
     needs: debian-base
     strategy:
       matrix:
@@ -100,25 +139,56 @@ jobs:
           - name: ssh
           - name: wg
           - name: xfce4
-
+        arch: ["amd64", "arm64"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: ${{ matrix.image.name }}
       path: ${{ matrix.image.name }}
+      arch: ${{ matrix.arch }}
       crpath: ghcr.io/pusnow
     secrets: inherit
 
-  fedora-custom:
+  debian-custom:
+    needs: debian-custom-build
+    strategy:
+      matrix:
+        image:
+         - ssh
+         - wg
+         - xfce4
+    uses: ./.github/workflows/docker-manifest.yml
+    with:
+      name: ${{ matrix.image }}
+      archs: amd64 arm64
+      crpath: ghcr.io/pusnow
+    secrets: inherit
+
+  fedora-custom-build:
     needs: fedora-base
     strategy:
       matrix:
         image:
           - name: dev
+        arch: ["amd64", "arm64"]
 
     uses: ./.github/workflows/docker-build.yml
     with:
       name: ${{ matrix.image.name }}
       path: ${{ matrix.image.name }}
+      arch: ${{ matrix.arch }}
+      crpath: ghcr.io/pusnow
+    secrets: inherit
+
+  fedora-custom:
+    needs: fedora-custom-build
+    strategy:
+      matrix:
+        image:
+         - dev
+    uses: ./.github/workflows/docker-manifest.yml
+    with:
+      name: ${{ matrix.image }}
+      archs: amd64 arm64
       crpath: ghcr.io/pusnow
     secrets: inherit
 
