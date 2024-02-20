@@ -73,7 +73,7 @@ jobs:
             packages: borgbackup
             cmd: borg
           - name: dnsmasq
-            packages: dnsmasq python3
+            packages: dnsmasq python3 curl
             cmd: /usr/sbin/dnsmasq
           - name: hostapd
             packages: hostapd iw wireless-tools
