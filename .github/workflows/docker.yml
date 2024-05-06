@@ -96,6 +96,9 @@ jobs:
           - name: netsetup
             packages: curl iptables jq
             cmd: curl
+          - name: igmpproxy
+            packages: igmpproxy
+            cmd: /usr/sbin/igmpproxy
         debian-tag: ["bookworm"]
         arch: ["amd64", "arm64"]
     uses: ./.github/workflows/docker-build.yml
@@ -123,6 +126,7 @@ jobs:
          - mptcpd
          - samba
          - netsetup
+         - igmpproxy
     uses: ./.github/workflows/docker-manifest.yml
     with:
       name: ${{ matrix.image }}
