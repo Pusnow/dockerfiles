@@ -11,27 +11,20 @@ on:
 
 jobs:
   dev-build:
-    strategy:
-      matrix:
-        debian-tag: ["bookworm"]
-        arch: ["amd64"]
     uses: ./.github/workflows/docker-build.yml
     with:
       name: dev
-      tag: ${{ matrix.debian-tag }}
+      tag: latest
       arch: ${{ matrix.arch }}
       path: dev
       crpath: ghcr.io/pusnow
     secrets: inherit
   dev:
     needs: dev-build
-    strategy:
-      matrix:
-        debian-tag: ["bookworm"]
     uses: ./.github/workflows/docker-manifest.yml
     with:
       name: dev
-      tag: ${{ matrix.debian-tag }}
+      tag: latest
       archs: amd64
       crpath: ghcr.io/pusnow
     secrets: inherit
