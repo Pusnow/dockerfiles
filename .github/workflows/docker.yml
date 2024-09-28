@@ -15,7 +15,7 @@ jobs:
     with:
       name: dev
       tag: latest
-      arch: ${{ matrix.arch }}
+      arch: amd64
       path: dev
       crpath: ghcr.io/pusnow
     secrets: inherit
