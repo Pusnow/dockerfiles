@@ -234,10 +234,4 @@ jobs:
       maximize: false
     secrets: inherit
 
-  keepalive:
-    needs: [debian-custom, debian, debian-qemu, actions-runner]
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: gautamkrishnar/keepalive-workflow@v1
     
